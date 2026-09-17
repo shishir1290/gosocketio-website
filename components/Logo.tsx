@@ -19,38 +19,19 @@ export default function Logo({
 }: LogoProps) {
   return (
     <div
-      className={`gosocketio-logo-wrapper ${className}`}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "10px",
-        userSelect: "none",
-        textDecoration: "none",
-      }}
+      className={`inline-flex items-center gap-2.5 select-none no-underline ${className}`}
     >
       {/* Emblem SVG */}
-      <div
-        style={{
-          width: `${size}px`,
-          height: `${size}px`,
-          position: "relative",
-          flexShrink: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+      <div className="relative shrink-0 flex items-center justify-center">
         <svg
           viewBox="0 0 128 128"
           width={size}
           height={size}
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          style={{
-            filter: glow ? "drop-shadow(0 0 14px rgba(0, 242, 254, 0.45))" : "none",
-            transition: "transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease",
-          }}
-          className="gosocketio-emblem"
+          className={`transition-all duration-300 ${
+            glow ? "drop-shadow-[0_0_14px_rgba(0,242,254,0.45)]" : ""
+          }`}
         >
           <defs>
             {/* Background Gradient */}
@@ -143,28 +124,13 @@ export default function Logo({
 
       {/* Brand Name Typography */}
       {showText && (
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <span
-            style={{
-              fontWeight: 800,
-              fontSize: size > 32 ? "1.25rem" : "1.1rem",
-              letterSpacing: "-0.025em",
-              color: "var(--text-primary)",
-              lineHeight: 1,
-            }}
-          >
+        <div className="flex items-center gap-2">
+          <span className="font-extrabold text-base sm:text-lg tracking-tight text-[var(--text-primary)] leading-none">
             g<span className="gradient-cyan-purple">socketio</span>
           </span>
 
           {badge && (
-            <span
-              className="badge badge-cyan"
-              style={{
-                fontSize: "0.7rem",
-                padding: "2px 8px",
-                lineHeight: "1.2",
-              }}
-            >
+            <span className="badge badge-cyan text-[0.7rem] py-0.5 px-2 leading-tight">
               {badge}
             </span>
           )}

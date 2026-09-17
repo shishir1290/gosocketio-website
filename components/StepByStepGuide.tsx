@@ -11,7 +11,7 @@ export default function StepByStepGuide() {
   const activeStep = STEP_BY_STEP_DOCS[activeStepIndex];
 
   return (
-    <section id="steps" style={{ padding: "100px 0 80px 0", position: "relative" }}>
+    <section id="steps" className="py-20 md:py-24 relative">
       <div className="container">
         {/* Section Header with Scroll Reveal */}
         <motion.div
@@ -19,35 +19,28 @@ export default function StepByStepGuide() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          style={{ textAlign: "center", marginBottom: "48px" }}
+          className="text-center mb-12"
         >
-          <div className="badge badge-cyan" style={{ marginBottom: "14px" }}>
+          <div className="badge badge-cyan mb-3.5">
             <span>Comprehensive Tutorial</span>
           </div>
-          <h2
-            style={{
-              fontSize: "clamp(2rem, 3.5vw, 2.8rem)",
-              fontWeight: 800,
-              letterSpacing: "-0.02em",
-              marginBottom: "16px",
-            }}
-          >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 text-[var(--text-primary)]">
             Step-by-Step <span className="gradient-cyan-purple">Implementation Guide</span>
           </h2>
-          <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem", maxWidth: "680px", margin: "0 auto" }}>
+          <p className="text-[var(--text-secondary)] text-base md:text-lg max-w-2xl mx-auto">
             Follow these step-by-step recipes to build secure, high-throughput, real-time Go backends using gsocketio.
           </p>
         </motion.div>
 
         {/* Main Grid: Steps List on Left, Active Step Code on Right */}
-        <div className="steps-grid">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Step Selector Navigation */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+            className="lg:col-span-5 flex flex-col gap-2.5"
           >
             {STEP_BY_STEP_DOCS.map((step, index) => {
               const isSelected = index === activeStepIndex;
@@ -57,56 +50,44 @@ export default function StepByStepGuide() {
                   onClick={() => setActiveStepIndex(index)}
                   whileHover={{ scale: 1.015, x: 3 }}
                   whileTap={{ scale: 0.985 }}
-                  className="glass-panel"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "16px",
-                    padding: "16px 20px",
-                    textAlign: "left",
-                    cursor: "pointer",
-                    background: isSelected ? "rgba(99, 102, 241, 0.15)" : "var(--bg-card)",
-                    borderColor: isSelected ? "var(--accent-indigo)" : "var(--border-subtle)",
-                    boxShadow: isSelected ? "0 0 25px rgba(99, 102, 241, 0.25)" : "none",
-                    transition: "all 0.25s ease",
-                  }}
+                  className={`glass-panel flex items-center gap-4 p-4 text-left cursor-pointer rounded-xl transition-all duration-200 border ${
+                    isSelected
+                      ? "bg-indigo-500/15 border-[var(--accent-indigo)] shadow-lg shadow-indigo-500/20"
+                      : "bg-[var(--bg-card)] border-[var(--border-subtle)] hover:border-[var(--border-active)]"
+                  }`}
                 >
                   <div
-                    style={{
-                      width: "38px",
-                      height: "38px",
-                      borderRadius: "10px",
-                      background: isSelected
-                        ? "linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-indigo) 100%)"
-                        : "rgba(255, 255, 255, 0.05)",
-                      color: isSelected ? "#07090e" : "var(--text-secondary)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontWeight: 800,
-                      fontSize: "0.95rem",
-                      flexShrink: 0,
-                    }}
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center font-extrabold text-sm shrink-0 transition-all ${
+                      isSelected
+                        ? "bg-gradient-to-br from-[var(--accent-cyan)] to-[var(--accent-indigo)] text-[#07090e]"
+                        : "bg-white/5 text-[var(--text-secondary)]"
+                    }`}
                   >
                     {step.number}
                   </div>
 
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 700, fontSize: "0.98rem", color: isSelected ? "var(--accent-indigo)" : "var(--text-primary)", marginBottom: "3px" }}>
+                  <div className="flex-1 min-w-0">
+                    <div
+                      className={`font-bold text-sm sm:text-base mb-0.5 truncate ${
+                        isSelected ? "text-[var(--accent-indigo)]" : "text-[var(--text-primary)]"
+                      }`}
+                    >
                       {step.title}
                     </div>
-                    <div style={{ fontSize: "0.82rem", color: isSelected ? "var(--text-secondary)" : "var(--text-muted)", lineHeight: 1.35 }}>
+                    <div
+                      className={`text-xs leading-relaxed line-clamp-2 ${
+                        isSelected ? "text-[var(--text-secondary)]" : "text-[var(--text-muted)]"
+                      }`}
+                    >
                       {step.shortDesc}
                     </div>
                   </div>
 
                   <ChevronRight
                     size={18}
-                    color={isSelected ? "var(--accent-cyan)" : "var(--text-muted)"}
-                    style={{
-                      transform: isSelected ? "translateX(4px)" : "none",
-                      transition: "transform 0.2s ease",
-                    }}
+                    className={`shrink-0 transition-transform duration-200 ${
+                      isSelected ? "text-[var(--accent-cyan)] translate-x-1" : "text-[var(--text-muted)]"
+                    }`}
                   />
                 </motion.button>
               );
@@ -119,7 +100,7 @@ export default function StepByStepGuide() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-60px" }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            style={{ position: "relative", minWidth: 0 }}
+            className="lg:col-span-7 relative min-w-0"
           >
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
@@ -128,62 +109,55 @@ export default function StepByStepGuide() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -12, scale: 0.99 }}
                 transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                className="glass-panel"
-                style={{
-                  padding: "clamp(18px, 3vw, 28px)",
-                  background: "var(--bg-card)",
-                  borderColor: "var(--border-active)",
-                  boxShadow: "var(--shadow-sm)",
-                }}
+                className="glass-panel p-5 sm:p-7 bg-[var(--bg-card)] border border-[var(--border-active)] rounded-2xl shadow-xl"
               >
                 {/* Step Header */}
-                <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "14px" }}>
-                  <span className="badge badge-cyan" style={{ fontSize: "0.82rem", fontWeight: 700 }}>
+                <div className="flex items-center gap-3 mb-3.5">
+                  <span className="badge badge-cyan text-xs font-bold">
                     Step {activeStep.number}
                   </span>
-                  <h3 style={{ fontSize: "clamp(1.2rem, 2.5vw, 1.4rem)", fontWeight: 800, color: "var(--text-primary)" }}>{activeStep.title}</h3>
+                  <h3 className="text-lg sm:text-xl font-extrabold text-[var(--text-primary)]">
+                    {activeStep.title}
+                  </h3>
                 </div>
 
-                <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "20px" }}>
+                <p className="text-[var(--text-secondary)] text-sm sm:text-base leading-relaxed mb-5">
                   {activeStep.summary}
                 </p>
 
                 {/* Code Block */}
-                <div style={{ marginBottom: "22px" }}>
-                  <CodeBlock code={activeStep.code} filename={activeStep.filename} language={activeStep.language} />
+                <div className="mb-5">
+                  <CodeBlock
+                    code={activeStep.code}
+                    filename={activeStep.filename}
+                    language={activeStep.language}
+                  />
                 </div>
 
                 {/* Key Takeaways */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: activeStep.tips ? "16px" : "0" }}>
-                  <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                <div className="flex flex-col gap-2">
+                  <div className="text-xs font-bold text-[var(--text-muted)] uppercase tracking-wider">
                     Key Takeaways
                   </div>
                   {activeStep.highlights.map((item, i) => (
-                    <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: "10px", fontSize: "0.88rem", color: "var(--text-secondary)" }}>
-                      <CheckCircle2 size={16} color="var(--accent-emerald)" style={{ marginTop: "3px", flexShrink: 0 }} />
-                      <span style={{ lineHeight: 1.5 }}>{item}</span>
+                    <div
+                      key={i}
+                      className="flex items-start gap-2.5 text-xs sm:text-sm text-[var(--text-secondary)]"
+                    >
+                      <CheckCircle2
+                        size={16}
+                        className="text-[var(--accent-emerald)] mt-0.5 shrink-0"
+                      />
+                      <span className="leading-relaxed">{item}</span>
                     </div>
                   ))}
                 </div>
 
                 {/* Pro Tip if any */}
                 {activeStep.tips && (
-                  <div
-                    style={{
-                      marginTop: "18px",
-                      padding: "12px 16px",
-                      background: "rgba(245, 158, 11, 0.09)",
-                      border: "1px solid rgba(245, 158, 11, 0.3)",
-                      borderRadius: "var(--radius-sm)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      fontSize: "0.86rem",
-                      color: "#fde68a",
-                    }}
-                  >
-                    <Lightbulb size={18} color="var(--accent-amber)" style={{ flexShrink: 0 }} />
-                    <span style={{ lineHeight: 1.4 }}>{activeStep.tips[0]}</span>
+                  <div className="mt-4 p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl flex items-center gap-2.5 text-xs sm:text-sm text-amber-200">
+                    <Lightbulb size={18} className="text-[var(--accent-amber)] shrink-0" />
+                    <span className="leading-relaxed">{activeStep.tips[0]}</span>
                   </div>
                 )}
               </motion.div>

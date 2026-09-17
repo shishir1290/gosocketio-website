@@ -1,3 +1,17 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-sans), 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: var(--font-mono), 'Fira Code', monospace;
+
+  --color-brand-cyan: #00f2fe;
+  --color-brand-blue: #4facfe;
+  --color-brand-indigo: #6366f1;
+  --color-brand-purple: #a855f7;
+  --color-brand-emerald: #10b981;
+  --color-brand-amber: #f59e0b;
+}
+
 :root, [data-theme="dark"] {
   --bg-primary: #07090e;
   --bg-secondary: #0d111a;
@@ -33,9 +47,6 @@
   --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.35);
   --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.25);
   --shadow-cyan-glow: 0 0 30px rgba(0, 242, 254, 0.2);
-
-  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
 }
 
 [data-theme="light"] {
@@ -70,12 +81,6 @@
   --shadow-cyan-glow: 0 0 30px rgba(2, 132, 199, 0.15);
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
 html, body {
   max-width: 100vw;
   overflow-x: hidden;
@@ -106,38 +111,6 @@ section[id] {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-indigo);
-}
-
-/* Responsive Navigation Breakpoints */
-@media (max-width: 900px) {
-  .desktop-nav {
-    display: none !important;
-  }
-  .mobile-menu-btn {
-    display: inline-flex !important;
-  }
-}
-
-/* Step-by-Step Grid Layout */
-.steps-grid {
-  display: grid;
-  grid-template-columns: 380px minmax(0, 1fr);
-  gap: 28px;
-  align-items: start;
-}
-
-@media (max-width: 1024px) {
-  .steps-grid {
-    grid-template-columns: 320px minmax(0, 1fr);
-    gap: 20px;
-  }
-}
-
-@media (max-width: 868px) {
-  .steps-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
 }
 
 /* Utilities */
@@ -305,7 +278,7 @@ section[id] {
     linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
 }
 
-/* Code styling & Prism Syntax Highlighting (Golang & Multi-Language) */
+/* Code styling & Prism Syntax Highlighting */
 pre {
   font-family: var(--font-mono);
   font-size: 0.88rem;
@@ -390,7 +363,6 @@ code {
   font-style: italic;
 }
 
-/* Animations */
 @keyframes pulseGlow {
   0%, 100% { opacity: 0.5; transform: scale(1); }
   50% { opacity: 0.8; transform: scale(1.04); }

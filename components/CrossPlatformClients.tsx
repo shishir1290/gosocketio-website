@@ -30,7 +30,7 @@ export default function CrossPlatformClients() {
   const activePlatform = CLIENT_PLATFORMS.find((p) => p.id === activePlatformId) || CLIENT_PLATFORMS[0];
 
   return (
-    <section id="clients" style={{ padding: "90px 0", position: "relative" }}>
+    <section id="clients" className="py-20 md:py-24 relative">
       <div className="container">
         {/* Section Header with Scroll Trigger */}
         <motion.div
@@ -38,23 +38,16 @@ export default function CrossPlatformClients() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          style={{ textAlign: "center", marginBottom: "40px" }}
+          className="text-center mb-10"
         >
-          <div className="badge badge-emerald" style={{ marginBottom: "14px" }}>
+          <div className="badge badge-emerald mb-3.5">
             <Globe size={13} />
             <span>Universal Compatibility</span>
           </div>
-          <h2
-            style={{
-              fontSize: "clamp(2rem, 3.5vw, 2.8rem)",
-              fontWeight: 800,
-              letterSpacing: "-0.02em",
-              marginBottom: "16px",
-            }}
-          >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 text-[var(--text-primary)]">
             Connect Any <span className="gradient-blue-emerald">Client Ecosystem</span>
           </h2>
-          <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem", maxWidth: "700px", margin: "0 auto" }}>
+          <p className="text-[var(--text-secondary)] text-base md:text-lg max-w-2xl mx-auto">
             gsocketio implements the standard Socket.IO v4 protocol. Seamlessly interface with web, mobile, desktop, AI services, and game engines.
           </p>
         </motion.div>
@@ -65,13 +58,7 @@ export default function CrossPlatformClients() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            gap: "10px",
-            marginBottom: "32px",
-          }}
+          className="flex flex-wrap justify-center gap-2.5 mb-8"
         >
           {CLIENT_PLATFORMS.map((platform) => {
             const isSelected = platform.id === activePlatformId;
@@ -81,26 +68,18 @@ export default function CrossPlatformClients() {
                 onClick={() => setActivePlatformId(platform.id)}
                 whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "10px 18px",
-                  borderRadius: "var(--radius-full)",
-                  fontSize: "0.9rem",
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  background: isSelected
-                    ? "linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(99, 102, 241, 0.22) 100%)"
-                    : "var(--bg-card)",
-                  color: isSelected ? "var(--text-primary)" : "var(--text-secondary)",
-                  border: `1px solid ${isSelected ? "var(--accent-emerald)" : "var(--border-subtle)"}`,
-                  boxShadow: isSelected ? "var(--shadow-glow)" : "var(--shadow-sm)",
-                  transition: "all 0.2s ease",
-                }}
+                className={`flex items-center gap-2 py-2 px-4 rounded-full text-xs sm:text-sm font-semibold cursor-pointer border transition-all duration-200 ${
+                  isSelected
+                    ? "bg-gradient-to-br from-emerald-500/20 to-indigo-500/20 text-[var(--text-primary)] border-[var(--accent-emerald)] shadow-md shadow-emerald-500/10"
+                    : "bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:text-[var(--text-primary)]"
+                }`}
               >
-                <span style={{ display: "flex", alignItems: "center", color: isSelected ? "var(--accent-emerald)" : "var(--text-muted)" }}>
-                  {getPlatformLucideIcon(platform.id, 16)}
+                <span
+                  className={`flex items-center ${
+                    isSelected ? "text-[var(--accent-emerald)]" : "text-[var(--text-muted)]"
+                  }`}
+                >
+                  {getPlatformLucideIcon(platform.id, 15)}
                 </span>
                 <span>{platform.name}</span>
               </motion.button>
@@ -116,59 +95,34 @@ export default function CrossPlatformClients() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.25 }}
-            className="glass-panel"
-            style={{
-              padding: "clamp(18px, 3vw, 28px)",
-              background: "var(--bg-card)",
-              border: "1px solid var(--border-subtle)",
-              maxWidth: "1020px",
-              margin: "0 auto",
-              boxShadow: "var(--shadow-sm)",
-            }}
+            className="glass-panel p-5 sm:p-7 bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-2xl max-w-5xl mx-auto shadow-xl"
           >
             {/* Header with Install Command */}
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                alignItems: "center",
-                justifyContent: "space-between",
-                gap: "14px",
-                marginBottom: "20px",
-                paddingBottom: "18px",
-                borderBottom: "1px solid var(--border-subtle)",
-              }}
-            >
+            <div className="flex flex-wrap items-center justify-between gap-3.5 mb-5 pb-4 border-b border-[var(--border-subtle)]">
               <div>
-                <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: "4px", display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ color: "var(--accent-emerald)" }}>{getPlatformLucideIcon(activePlatform.id, 20)}</span>
+                <h3 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] mb-1 flex items-center gap-2">
+                  <span className="text-[var(--accent-emerald)]">
+                    {getPlatformLucideIcon(activePlatform.id, 20)}
+                  </span>
                   <span>{activePlatform.name} Integration</span>
                 </h3>
-                <p style={{ color: "var(--text-secondary)", fontSize: "0.88rem" }}>{activePlatform.description}</p>
+                <p className="text-[var(--text-secondary)] text-xs sm:text-sm">
+                  {activePlatform.description}
+                </p>
               </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "8px 14px",
-                  background: "var(--bg-input)",
-                  border: "1px solid var(--border-subtle)",
-                  borderRadius: "var(--radius-sm)",
-                  fontSize: "0.82rem",
-                  fontFamily: "var(--font-mono)",
-                  color: "var(--text-primary)",
-                  boxShadow: "var(--shadow-sm)",
-                }}
-              >
-                <Terminal size={14} color="var(--accent-emerald)" />
+              <div className="flex items-center gap-2 py-2 px-3.5 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-xs font-mono text-[var(--text-primary)] shadow-sm">
+                <Terminal size={14} className="text-[var(--accent-emerald)] shrink-0" />
                 <code>{activePlatform.installCmd}</code>
               </div>
             </div>
 
             {/* Code Block */}
-            <CodeBlock code={activePlatform.code} language={activePlatform.language} filename={`client.${activePlatform.language}`} />
+            <CodeBlock
+              code={activePlatform.code}
+              language={activePlatform.language}
+              filename={`client.${activePlatform.language}`}
+            />
           </motion.div>
         </AnimatePresence>
       </div>

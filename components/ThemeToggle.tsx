@@ -21,23 +21,11 @@ export default function ThemeToggle({ className = "", size = 18 }: ThemeTogglePr
       whileHover={{ scale: 1.08 }}
       whileTap={{ scale: 0.92 }}
       aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        width: "38px",
-        height: "38px",
-        borderRadius: "var(--radius-full)",
-        background: isDark ? "rgba(255, 255, 255, 0.06)" : "rgba(0, 0, 0, 0.05)",
-        border: `1px solid ${isDark ? "rgba(255, 255, 255, 0.12)" : "rgba(0, 0, 0, 0.12)"}`,
-        color: isDark ? "var(--accent-amber)" : "var(--accent-indigo)",
-        cursor: "pointer",
-        outline: "none",
-        transition: "background 0.25s ease, border-color 0.25s ease",
-        position: "relative",
-        overflow: "hidden",
-      }}
-      className={className}
+      className={`inline-flex items-center justify-center w-9 h-9 rounded-full cursor-pointer outline-none relative overflow-hidden transition-colors duration-200 border ${
+        isDark
+          ? "bg-white/5 border-white/15 text-[var(--accent-amber)] hover:bg-white/10"
+          : "bg-black/5 border-black/15 text-[var(--accent-indigo)] hover:bg-black/10"
+      } ${className}`}
     >
       <motion.div
         key={theme}
@@ -45,12 +33,12 @@ export default function ThemeToggle({ className = "", size = 18 }: ThemeTogglePr
         animate={{ y: 0, opacity: 1, rotate: 0 }}
         exit={{ y: 16, opacity: 0, rotate: 45 }}
         transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+        className="flex items-center justify-center"
       >
         {isDark ? (
-          <Moon size={size} fill="currentColor" opacity={0.9} />
+          <Moon size={size} fill="currentColor" className="opacity-90" />
         ) : (
-          <Sun size={size} fill="currentColor" opacity={0.9} />
+          <Sun size={size} fill="currentColor" className="opacity-90" />
         )}
       </motion.div>
     </motion.button>

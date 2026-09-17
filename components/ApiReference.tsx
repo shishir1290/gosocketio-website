@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { API_REFERENCE_DATA } from "@/lib/docs-data";
-import { Search, Code2, BookOpen } from "lucide-react";
+import { Search, Code2 } from "lucide-react";
 
 export default function ApiReference() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -18,7 +18,7 @@ export default function ApiReference() {
   })).filter((cat) => cat.items.length > 0);
 
   return (
-    <section id="api" style={{ padding: "90px 0", position: "relative" }}>
+    <section id="api" className="py-20 md:py-24 relative">
       <div className="container">
         {/* Header with Scroll Reveal */}
         <motion.div
@@ -26,55 +26,37 @@ export default function ApiReference() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          style={{ textAlign: "center", marginBottom: "40px" }}
+          className="text-center mb-10"
         >
-          <div className="badge badge-cyan" style={{ marginBottom: "14px" }}>
+          <div className="badge badge-cyan mb-3.5">
             <Code2 size={13} />
             <span>Go API Reference</span>
           </div>
-          <h2
-            style={{
-              fontSize: "clamp(2rem, 3.5vw, 2.8rem)",
-              fontWeight: 800,
-              letterSpacing: "-0.02em",
-              marginBottom: "16px",
-            }}
-          >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 text-[var(--text-primary)]">
             Complete <span className="gradient-cyan-purple">API Reference</span>
           </h2>
-          <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem", maxWidth: "680px", margin: "0 auto 30px auto" }}>
+          <p className="text-[var(--text-secondary)] text-base md:text-lg max-w-2xl mx-auto mb-8">
             Explore every method, interface, and configuration field provided by the pure-Go gsocketio library.
           </p>
 
           {/* Search bar */}
-          <div style={{ maxWidth: "480px", margin: "0 auto", position: "relative" }}>
+          <div className="max-w-lg mx-auto relative">
             <Search
               size={18}
-              color="var(--text-muted)"
-              style={{ position: "absolute", left: "16px", top: "50%", transform: "translateY(-50%)" }}
+              className="text-[var(--text-muted)] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
             />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search methods (e.g. Emit, OnConnect, ToRoom)..."
-              style={{
-                width: "100%",
-                padding: "13px 18px 13px 44px",
-                background: "var(--bg-card)",
-                border: "1px solid var(--border-subtle)",
-                borderRadius: "var(--radius-full)",
-                color: "var(--text-primary)",
-                fontSize: "0.92rem",
-                outline: "none",
-                boxShadow: "var(--shadow-sm)",
-              }}
+              className="w-full py-3 pr-4 pl-11 bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-full text-[var(--text-primary)] text-sm sm:text-base outline-none shadow-sm focus:border-[var(--accent-cyan)] transition-colors"
             />
           </div>
         </motion.div>
 
         {/* Categories */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "36px", maxWidth: "1020px", margin: "0 auto" }}>
+        <div className="flex flex-col gap-8 max-w-5xl mx-auto">
           {filteredCategories.map((cat, idx) => (
             <motion.div
               key={idx}
@@ -82,43 +64,23 @@ export default function ApiReference() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.45, delay: idx * 0.08 }}
-              className="glass-panel"
-              style={{ padding: "clamp(18px, 3vw, 28px)", background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}
+              className="glass-panel p-5 sm:p-7 bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-2xl shadow-xl"
             >
-              <h3 style={{ fontSize: "1.3rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: "18px" }}>
+              <h3 className="text-lg sm:text-xl font-bold text-[var(--text-primary)] mb-4">
                 {cat.category}
               </h3>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              <div className="flex flex-col gap-2.5">
                 {cat.items.map((item, itemIdx) => (
                   <motion.div
                     key={itemIdx}
                     whileHover={{ scale: 1.01, x: 3 }}
-                    style={{
-                      padding: "14px 18px",
-                      background: "var(--bg-input)",
-                      border: "1px solid var(--border-subtle)",
-                      borderRadius: "var(--radius-sm)",
-                      display: "flex",
-                      flexWrap: "wrap",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      gap: "12px",
-                      cursor: "default",
-                      transition: "all 0.2s ease",
-                    }}
+                    className="p-3.5 sm:p-4 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-xl flex flex-wrap items-center justify-between gap-3 cursor-default hover:border-[var(--border-active)] transition-all"
                   >
-                    <code
-                      style={{
-                        fontFamily: "var(--font-mono)",
-                        color: "var(--accent-cyan)",
-                        fontSize: "0.9rem",
-                        fontWeight: 600,
-                      }}
-                    >
+                    <code className="font-mono text-[var(--accent-cyan)] text-xs sm:text-sm font-semibold">
                       {item.name}
                     </code>
-                    <span style={{ color: "var(--text-secondary)", fontSize: "0.88rem", flex: 1, minWidth: "240px" }}>
+                    <span className="text-[var(--text-secondary)] text-xs sm:text-sm flex-1 min-w-[240px]">
                       {item.desc}
                     </span>
                   </motion.div>
@@ -128,7 +90,7 @@ export default function ApiReference() {
           ))}
 
           {filteredCategories.length === 0 && (
-            <div style={{ textAlign: "center", padding: "40px", color: "var(--text-muted)" }}>
+            <div className="text-center py-10 text-[var(--text-muted)] text-sm sm:text-base">
               No methods found matching &quot;{searchQuery}&quot;.
             </div>
           )}

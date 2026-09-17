@@ -69,64 +69,30 @@ export default function CodeBlock({
   }, [cleanCode, langKey]);
 
   return (
-    <div
-      style={{
-        background: "rgba(10, 14, 23, 0.95)",
-        border: "1px solid rgba(255, 255, 255, 0.1)",
-        borderRadius: "var(--radius-md)",
-        overflow: "hidden",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.45)",
-      }}
-    >
+    <div className="bg-[#0a0e17]/95 border border-white/10 rounded-xl overflow-hidden shadow-2xl">
       {/* Header bar */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "10px 16px",
-          background: "rgba(255, 255, 255, 0.03)",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.06)",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div style={{ display: "flex", gap: "6px" }}>
-            <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#ef4444", display: "inline-block" }} />
-            <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#f59e0b", display: "inline-block" }} />
-            <span style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#10b981", display: "inline-block" }} />
+      <div className="flex items-center justify-between px-4 py-2.5 bg-white/[0.03] border-b border-white/[0.06]">
+        <div className="flex items-center gap-2.5">
+          <div className="flex gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block" />
           </div>
           {filename && (
-            <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.8rem",
-                color: "var(--text-secondary)",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                marginLeft: "8px",
-              }}
-            >
+            <span className="font-mono text-xs text-[var(--text-secondary)] flex items-center gap-1.5 ml-2">
               <Terminal size={13} /> {filename}
             </span>
           )}
         </div>
 
         <button
+          type="button"
           onClick={handleCopy}
-          style={{
-            background: copied ? "rgba(16, 185, 129, 0.18)" : "rgba(255, 255, 255, 0.07)",
-            border: `1px solid ${copied ? "rgba(16, 185, 129, 0.4)" : "rgba(255, 255, 255, 0.1)"}`,
-            color: copied ? "#6ee7b7" : "var(--text-secondary)",
-            padding: "5px 12px",
-            borderRadius: "var(--radius-sm)",
-            cursor: "pointer",
-            fontSize: "0.78rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            transition: "all 0.2s ease",
-          }}
+          className={`px-3 py-1 rounded-md text-xs font-medium flex items-center gap-1.5 cursor-pointer transition-all duration-200 border ${
+            copied
+              ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
+              : "bg-white/5 border-white/10 text-[var(--text-secondary)] hover:bg-white/10 hover:text-white"
+          }`}
         >
           {copied ? <Check size={13} /> : <Copy size={13} />}
           {copied ? "Copied!" : "Copy"}
@@ -134,55 +100,20 @@ export default function CodeBlock({
       </div>
 
       {/* Code body with line numbers */}
-      <div
-        style={{
-          maxHeight: "540px",
-          overflow: "auto",
-          background: "#080b12",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            minWidth: "fit-content",
-            width: "100%",
-            padding: "16px 0",
-          }}
-        >
+      <div className="max-h-[540px] overflow-auto bg-[#080b12]">
+        <div className="flex min-w-fit w-full py-4">
           {showLineNumbers && (
-            <div
-              style={{
-                padding: "0 14px 0 16px",
-                userSelect: "none",
-                color: "rgba(255, 255, 255, 0.22)",
-                textAlign: "right",
-                minWidth: "40px",
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.86rem",
-                lineHeight: "1.65",
-                fontVariantNumeric: "tabular-nums",
-                flexShrink: 0,
-              }}
-            >
+            <div className="px-3.5 select-none text-white/20 text-right min-w-[40px] font-mono text-[0.84rem] leading-relaxed tabular-nums shrink-0">
               {rawLines.map((_, idx) => (
                 <div key={idx}>{idx + 1}</div>
               ))}
             </div>
           )}
 
-          <div
-            style={{
-              padding: "0 16px 0 4px",
-              flex: 1,
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.86rem",
-              lineHeight: "1.65",
-              minWidth: 0,
-            }}
-          >
+          <div className="pr-4 pl-1 flex-1 font-mono text-[0.84rem] leading-relaxed min-w-0">
             <pre
               suppressHydrationWarning
-              style={{ margin: 0, overflow: "visible", whiteSpace: "pre", color: "#e2e8f0" }}
+              className="m-0 overflow-visible whitespace-pre text-slate-200"
             >
               <code
                 suppressHydrationWarning

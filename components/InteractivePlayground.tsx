@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Play, Square, Send, Plus, Trash2, CheckCircle2, Terminal, Activity, Layers } from "lucide-react";
+import { Play, Square, Send, Plus, Trash2, Terminal, Activity } from "lucide-react";
 
 interface LogEntry {
   id: string;
@@ -15,7 +15,7 @@ interface LogEntry {
 export default function InteractivePlayground() {
   const [connected, setConnected] = useState(false);
   const [sid, setSid] = useState<string | null>(null);
-  const [currentNamespace, setCurrentNamespace] = useState("/");
+  const [currentNamespace] = useState("/");
   const [currentRoom, setCurrentRoom] = useState("lobby");
   const [eventName, setEventName] = useState("chat");
   const [eventPayload, setEventPayload] = useState('{"text": "Hello Go socket!"}');
@@ -28,10 +28,7 @@ export default function InteractivePlayground() {
     },
   ]);
 
-  const [isMounted, setIsMounted] = useState(false);
-
   useEffect(() => {
-    setIsMounted(true);
     setLogs([
       {
         id: "1",
@@ -125,7 +122,7 @@ export default function InteractivePlayground() {
   };
 
   return (
-    <section id="playground" style={{ padding: "90px 0", position: "relative" }}>
+    <section id="playground" className="py-20 md:py-24 relative">
       <div className="container">
         {/* Section Header with Scroll Reveal */}
         <motion.div
@@ -133,69 +130,41 @@ export default function InteractivePlayground() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          style={{ textAlign: "center", marginBottom: "40px" }}
+          className="text-center mb-10"
         >
-          <div className="badge badge-cyan" style={{ marginBottom: "14px" }}>
+          <div className="badge badge-cyan mb-3.5">
             <Activity size={13} />
             <span>Interactive Tool</span>
           </div>
-          <h2
-            style={{
-              fontSize: "clamp(2rem, 3.5vw, 2.8rem)",
-              fontWeight: 800,
-              letterSpacing: "-0.02em",
-              marginBottom: "16px",
-            }}
-          >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 text-[var(--text-primary)]">
             Live <span className="gradient-cyan-purple">Socket.IO Simulator</span>
           </h2>
-          <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem", maxWidth: "680px", margin: "0 auto" }}>
+          <p className="text-[var(--text-secondary)] text-base md:text-lg max-w-2xl mx-auto">
             Test handshakes, room subscriptions, and packet inspection live in your browser against simulated gsocketio responses.
           </p>
         </motion.div>
 
-        {/* Playground Box with Motion */}
+        {/* Playground Box */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="glass-panel"
-          style={{
-            maxWidth: "1100px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: "0",
-            overflow: "hidden",
-            border: "1px solid var(--border-active)",
-            boxShadow: "var(--shadow-sm)",
-          }}
+          className="glass-panel max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 overflow-hidden border border-[var(--border-active)] rounded-2xl shadow-xl"
         >
           {/* Controls Column */}
-          <div
-            style={{
-              padding: "24px",
-              background: "var(--bg-card)",
-              borderRight: "1px solid var(--border-subtle)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "20px",
-            }}
-          >
+          <div className="lg:col-span-5 p-5 sm:p-6 bg-[var(--bg-card)] border-b lg:border-b-0 lg:border-r border-[var(--border-subtle)] flex flex-col gap-5">
             {/* Connection Status Header */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
                 <span
-                  style={{
-                    width: "10px",
-                    height: "10px",
-                    borderRadius: "50%",
-                    background: connected ? "#10b981" : "#ef4444",
-                    boxShadow: connected ? "0 0 10px #10b981" : "none",
-                  }}
+                  className={`w-2.5 h-2.5 rounded-full ${
+                    connected
+                      ? "bg-emerald-500 shadow-[0_0_10px_#10b981]"
+                      : "bg-red-500"
+                  }`}
                 />
-                <span style={{ fontWeight: 700, fontSize: "0.95rem", color: "var(--text-primary)" }}>
+                <span className="font-bold text-sm sm:text-base text-[var(--text-primary)]">
                   {connected ? "Connected" : "Disconnected"}
                 </span>
               </div>
@@ -204,8 +173,7 @@ export default function InteractivePlayground() {
                 <button
                   type="button"
                   onClick={handleDisconnect}
-                  className="btn-secondary"
-                  style={{ padding: "6px 14px", fontSize: "0.82rem", borderColor: "rgba(239, 68, 68, 0.4)", color: "#ef4444" }}
+                  className="btn-secondary py-1.5 px-3.5 text-xs font-semibold border-red-500/40 text-red-500 hover:bg-red-500/10 cursor-pointer inline-flex items-center gap-1.5"
                 >
                   <Square size={13} fill="currentColor" /> Disconnect
                 </button>
@@ -213,8 +181,7 @@ export default function InteractivePlayground() {
                 <button
                   type="button"
                   onClick={handleConnect}
-                  className="btn-primary"
-                  style={{ padding: "6px 16px", fontSize: "0.82rem" }}
+                  className="btn-primary py-1.5 px-4 text-xs font-semibold cursor-pointer inline-flex items-center gap-1.5"
                 >
                   <Play size={13} fill="currentColor" /> Connect
                 </button>
@@ -222,49 +189,29 @@ export default function InteractivePlayground() {
             </div>
 
             {sid && (
-              <div
-                style={{
-                  padding: "8px 12px",
-                  background: "rgba(0, 242, 254, 0.08)",
-                  border: "1px solid rgba(0, 242, 254, 0.25)",
-                  borderRadius: "var(--radius-sm)",
-                  fontSize: "0.82rem",
-                  fontFamily: "var(--font-mono)",
-                  color: "var(--accent-cyan)",
-                }}
-              >
+              <div className="p-2.5 px-3 bg-cyan-400/10 border border-cyan-400/25 rounded-lg text-xs font-mono text-[var(--accent-cyan)] truncate">
                 SID: <strong>{sid}</strong>
               </div>
             )}
 
             {/* Room Actions */}
             <div>
-              <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 700, color: "var(--text-secondary)", marginBottom: "6px" }}>
+              <label className="block text-xs font-bold text-[var(--text-secondary)] mb-1.5">
                 Room Subscription
               </label>
-              <div style={{ display: "flex", gap: "8px" }}>
+              <div className="flex gap-2">
                 <input
                   type="text"
                   value={currentRoom}
                   onChange={(e) => setCurrentRoom(e.target.value)}
                   placeholder="room name (e.g. lobby)"
-                  style={{
-                    flex: 1,
-                    padding: "9px 12px",
-                    background: "var(--bg-input)",
-                    border: "1px solid var(--border-subtle)",
-                    borderRadius: "var(--radius-sm)",
-                    color: "var(--text-primary)",
-                    fontSize: "0.86rem",
-                    outline: "none",
-                  }}
+                  className="flex-1 py-2 px-3 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-[var(--text-primary)] text-xs sm:text-sm outline-none focus:border-[var(--accent-cyan)]"
                 />
                 <button
                   type="button"
                   onClick={handleJoinRoom}
                   disabled={!connected}
-                  className="btn-secondary"
-                  style={{ padding: "9px 14px", fontSize: "0.82rem", opacity: connected ? 1 : 0.5 }}
+                  className="btn-secondary py-2 px-3.5 text-xs font-semibold inline-flex items-center gap-1 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Plus size={14} /> Join
                 </button>
@@ -272,8 +219,8 @@ export default function InteractivePlayground() {
             </div>
 
             {/* Event Dispatch */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 700, color: "var(--text-secondary)" }}>
+            <div className="flex flex-col gap-2.5">
+              <label className="block text-xs font-bold text-[var(--text-secondary)]">
                 Emit Custom Event
               </label>
 
@@ -282,15 +229,7 @@ export default function InteractivePlayground() {
                 value={eventName}
                 onChange={(e) => setEventName(e.target.value)}
                 placeholder="event name (e.g. chat)"
-                style={{
-                  padding: "9px 12px",
-                  background: "var(--bg-input)",
-                  border: "1px solid var(--border-subtle)",
-                  borderRadius: "var(--radius-sm)",
-                  color: "var(--text-primary)",
-                  fontSize: "0.86rem",
-                  outline: "none",
-                }}
+                className="py-2 px-3 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-[var(--text-primary)] text-xs sm:text-sm outline-none focus:border-[var(--accent-cyan)]"
               />
 
               <textarea
@@ -298,25 +237,14 @@ export default function InteractivePlayground() {
                 onChange={(e) => setEventPayload(e.target.value)}
                 rows={3}
                 placeholder='{"key": "value"}'
-                style={{
-                  padding: "9px 12px",
-                  background: "var(--bg-input)",
-                  border: "1px solid var(--border-subtle)",
-                  borderRadius: "var(--radius-sm)",
-                  color: "var(--text-primary)",
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "0.82rem",
-                  resize: "vertical",
-                  outline: "none",
-                }}
+                className="w-full py-2 px-3 bg-[var(--bg-input)] border border-[var(--border-subtle)] rounded-lg text-[var(--text-primary)] font-mono text-xs outline-none focus:border-[var(--accent-cyan)] resize-y"
               />
 
               <button
                 type="button"
                 onClick={handleEmitEvent}
                 disabled={!connected}
-                className="btn-primary"
-                style={{ padding: "10px", fontSize: "0.88rem", opacity: connected ? 1 : 0.5 }}
+                className="btn-primary py-2.5 text-xs sm:text-sm font-semibold inline-flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send size={14} /> Emit Event
               </button>
@@ -324,41 +252,17 @@ export default function InteractivePlayground() {
           </div>
 
           {/* Live Packet Log Stream */}
-          <div
-            style={{
-              padding: "20px",
-              background: "#060910",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: "14px",
-                paddingBottom: "10px",
-                borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "var(--text-secondary)", fontSize: "0.86rem" }}>
-                <Terminal size={15} color="var(--accent-cyan)" />
-                <span style={{ fontWeight: 600 }}>Live Wireframe Packet Stream</span>
+          <div className="lg:col-span-7 p-5 bg-[#060910] flex flex-col min-w-0">
+            <div className="flex items-center justify-between mb-3.5 pb-2.5 border-b border-white/10">
+              <div className="flex items-center gap-2 text-[var(--text-secondary)] text-xs sm:text-sm font-semibold">
+                <Terminal size={15} className="text-[var(--accent-cyan)] shrink-0" />
+                <span>Live Wireframe Packet Stream</span>
               </div>
 
               <button
+                type="button"
                 onClick={handleClearLogs}
-                style={{
-                  background: "transparent",
-                  border: "none",
-                  color: "var(--text-muted)",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "4px",
-                  fontSize: "0.78rem",
-                }}
+                className="bg-transparent border-0 text-[var(--text-muted)] hover:text-white cursor-pointer inline-flex items-center gap-1 text-xs transition-colors"
               >
                 <Trash2 size={13} /> Clear
               </button>
@@ -366,76 +270,42 @@ export default function InteractivePlayground() {
 
             <div
               ref={logContainerRef}
-              style={{
-                flex: 1,
-                minHeight: "320px",
-                maxHeight: "440px",
-                overflowY: "auto",
-                display: "flex",
-                flexDirection: "column",
-                gap: "8px",
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.82rem",
-              }}
+              className="flex-1 min-h-[300px] max-h-[440px] overflow-y-auto flex flex-col gap-2 font-mono text-xs"
             >
               {logs.map((log) => {
-                let badgeColor = "#64748b";
-                let badgeBg = "rgba(100, 116, 139, 0.15)";
+                let badgeColor = "text-slate-400 bg-slate-500/15";
                 let prefix = "SYS";
 
                 if (log.type === "in") {
-                  badgeColor = "#10b981";
-                  badgeBg = "rgba(16, 185, 129, 0.15)";
+                  badgeColor = "text-emerald-400 bg-emerald-500/15";
                   prefix = "RECV";
                 } else if (log.type === "out") {
-                  badgeColor = "#00f2fe";
-                  badgeBg = "rgba(0, 242, 254, 0.15)";
+                  badgeColor = "text-cyan-400 bg-cyan-400/15";
                   prefix = "SEND";
                 } else if (log.type === "err") {
-                  badgeColor = "#ef4444";
-                  badgeBg = "rgba(239, 68, 68, 0.15)";
+                  badgeColor = "text-red-400 bg-red-500/15";
                   prefix = "ERR";
                 }
 
                 return (
                   <div
                     key={log.id}
-                    style={{
-                      padding: "8px 12px",
-                      background: "rgba(255, 255, 255, 0.02)",
-                      border: "1px solid rgba(255, 255, 255, 0.04)",
-                      borderRadius: "6px",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "4px",
-                    }}
+                    className="p-2.5 bg-white/[0.02] border border-white/[0.04] rounded-lg flex flex-col gap-1"
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                       <span
-                        style={{
-                          fontSize: "0.68rem",
-                          fontWeight: 700,
-                          padding: "2px 6px",
-                          borderRadius: "4px",
-                          color: badgeColor,
-                          background: badgeBg,
-                        }}
+                        className={`text-[0.68rem] font-bold py-0.5 px-1.5 rounded ${badgeColor} shrink-0`}
                       >
                         {prefix}
                       </span>
-                      <span style={{ color: "var(--text-muted)", fontSize: "0.74rem" }}>{log.time}</span>
-                      <span style={{ color: "#e2e8f0", wordBreak: "break-all" }}>{log.text}</span>
+                      <span className="text-[var(--text-muted)] text-[0.72rem] shrink-0">
+                        {log.time}
+                      </span>
+                      <span className="text-slate-200 break-all">{log.text}</span>
                     </div>
 
                     {log.raw && (
-                      <div
-                        style={{
-                          color: "var(--accent-cyan)",
-                          fontSize: "0.76rem",
-                          paddingLeft: "42px",
-                          opacity: 0.85,
-                        }}
-                      >
+                      <div className="text-[var(--accent-cyan)] text-[0.76rem] pl-9 opacity-85 break-all">
                         Raw: {log.raw}
                       </div>
                     )}

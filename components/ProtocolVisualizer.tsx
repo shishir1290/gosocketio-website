@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Radio, ArrowRight, ArrowLeft, RefreshCw, Cpu, Activity, Laptop, Server } from "lucide-react";
+import { ArrowRight, ArrowLeft, Cpu, Laptop, Server } from "lucide-react";
 
 export default function ProtocolVisualizer() {
   const [activeStep, setActiveStep] = useState(0);
@@ -60,7 +60,7 @@ export default function ProtocolVisualizer() {
   ];
 
   return (
-    <section id="protocol" style={{ padding: "90px 0", position: "relative" }}>
+    <section id="protocol" className="py-20 md:py-24 relative">
       <div className="container">
         {/* Section Header with Scroll Reveal */}
         <motion.div
@@ -68,23 +68,16 @@ export default function ProtocolVisualizer() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          style={{ textAlign: "center", marginBottom: "45px" }}
+          className="text-center mb-11"
         >
-          <div className="badge badge-cyan" style={{ marginBottom: "14px" }}>
+          <div className="badge badge-cyan mb-3.5">
             <Cpu size={13} />
             <span>Wire Protocol Architecture</span>
           </div>
-          <h2
-            style={{
-              fontSize: "clamp(2rem, 3.5vw, 2.8rem)",
-              fontWeight: 800,
-              letterSpacing: "-0.02em",
-              marginBottom: "16px",
-            }}
-          >
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight mb-4 text-[var(--text-primary)]">
             Engine.IO v4 <span className="gradient-cyan-purple">Wire Lifecycle</span>
           </h2>
-          <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem", maxWidth: "680px", margin: "0 auto" }}>
+          <p className="text-[var(--text-secondary)] text-base md:text-lg max-w-2xl mx-auto">
             Explore the RFC 6455 frame sequence and Engine.IO / Socket.IO packet transitions underneath gsocketio.
           </p>
         </motion.div>
@@ -95,27 +88,10 @@ export default function ProtocolVisualizer() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="glass-panel"
-          style={{
-            maxWidth: "960px",
-            margin: "0 auto",
-            padding: "clamp(18px, 3vw, 28px)",
-            background: "var(--bg-card)",
-            border: "1px solid var(--border-subtle)",
-            boxShadow: "var(--shadow-sm)",
-          }}
+          className="glass-panel max-w-4xl mx-auto p-5 sm:p-7 bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-2xl shadow-xl"
         >
           {/* Progress Timeline Pills */}
-          <div
-            style={{
-              display: "flex",
-              overflowX: "auto",
-              gap: "8px",
-              paddingBottom: "16px",
-              marginBottom: "24px",
-              borderBottom: "1px solid var(--border-subtle)",
-            }}
-          >
+          <div className="flex overflow-x-auto gap-2 pb-4 mb-6 border-b border-[var(--border-subtle)]">
             {steps.map((step, idx) => {
               const isSelected = activeStep === idx;
               return (
@@ -124,19 +100,11 @@ export default function ProtocolVisualizer() {
                   onClick={() => setActiveStep(idx)}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  style={{
-                    padding: "8px 14px",
-                    borderRadius: "var(--radius-full)",
-                    fontSize: "0.82rem",
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    whiteSpace: "nowrap",
-                    background: isSelected ? "rgba(0, 242, 254, 0.18)" : "var(--bg-card)",
-                    color: isSelected ? "var(--accent-cyan)" : "var(--text-secondary)",
-                    border: `1px solid ${isSelected ? "var(--accent-cyan)" : "var(--border-subtle)"}`,
-                    boxShadow: isSelected ? "var(--shadow-cyan-glow)" : "var(--shadow-sm)",
-                    transition: "all 0.2s ease",
-                  }}
+                  className={`py-2 px-3.5 rounded-full text-xs font-semibold cursor-pointer whitespace-nowrap transition-all duration-200 border ${
+                    isSelected
+                      ? "bg-cyan-400/20 text-[var(--accent-cyan)] border-[var(--accent-cyan)] shadow-md shadow-cyan-400/10"
+                      : "bg-[var(--bg-card)] text-[var(--text-secondary)] border-[var(--border-subtle)]"
+                  }`}
                 >
                   Step {idx + 1}
                 </motion.button>
@@ -145,97 +113,60 @@ export default function ProtocolVisualizer() {
           </div>
 
           {/* Wireframe Diagram Area */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr auto 1fr",
-              gap: "12px",
-              alignItems: "center",
-              marginBottom: "28px",
-              padding: "clamp(14px, 2.5vw, 24px) 12px",
-              background: "var(--bg-input)",
-              borderRadius: "var(--radius-md)",
-              border: "1px solid var(--border-subtle)",
-            }}
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 items-center mb-7 p-4 sm:p-6 bg-[var(--bg-input)] rounded-xl border border-[var(--border-subtle)]">
             {/* Client Node */}
-            <div
-              style={{
-                textAlign: "center",
-                padding: "clamp(10px, 2vw, 16px)",
-                background: "rgba(99, 102, 241, 0.12)",
-                border: "1px solid rgba(99, 102, 241, 0.35)",
-                borderRadius: "var(--radius-md)",
-              }}
-            >
-              <div style={{ display: "inline-flex", color: "var(--accent-indigo)", marginBottom: "4px" }}>
+            <div className="text-center p-3.5 sm:p-4 bg-indigo-500/10 border border-indigo-500/30 rounded-xl">
+              <div className="inline-flex text-[var(--accent-indigo)] mb-1">
                 <Laptop size={22} />
               </div>
-              <div style={{ fontWeight: 700, fontSize: "clamp(0.82rem, 2vw, 0.95rem)", color: "var(--text-primary)" }}>Client App</div>
-              <div style={{ fontSize: "0.74rem", color: "var(--text-muted)" }}>socket.io-client</div>
+              <div className="font-bold text-xs sm:text-sm text-[var(--text-primary)]">
+                Client App
+              </div>
+              <div className="text-[0.72rem] text-[var(--text-muted)]">socket.io-client</div>
             </div>
 
             {/* Direction Arrow & Layer Indicator */}
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
-              <span className="badge" style={{ fontSize: "0.7rem", padding: "2px 6px" }}>
+            <div className="flex flex-col items-center gap-1.5 my-2 sm:my-0">
+              <span className="badge text-[0.7rem] py-0.5 px-2">
                 {steps[activeStep].layer}
               </span>
-              <div style={{ display: "flex", alignItems: "center", color: "var(--accent-cyan)" }}>
+              <div className="flex items-center text-[var(--accent-cyan)]">
                 {steps[activeStep].direction === "client-to-server" ? (
-                  <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                    <span style={{ fontSize: "0.76rem", fontWeight: 600 }}>SEND</span>
-                    <ArrowRight size={18} />
+                  <div className="flex items-center gap-1">
+                    <span className="text-xs font-semibold">SEND</span>
+                    <ArrowRight size={16} />
                   </div>
                 ) : (
-                  <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                    <ArrowLeft size={18} />
-                    <span style={{ fontSize: "0.76rem", fontWeight: 600 }}>REPLY</span>
+                  <div className="flex items-center gap-1">
+                    <ArrowLeft size={16} />
+                    <span className="text-xs font-semibold">REPLY</span>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Go Server Node */}
-            <div
-              style={{
-                textAlign: "center",
-                padding: "clamp(10px, 2vw, 16px)",
-                background: "rgba(0, 242, 254, 0.12)",
-                border: "1px solid rgba(0, 242, 254, 0.35)",
-                borderRadius: "var(--radius-md)",
-              }}
-            >
-              <div style={{ display: "inline-flex", color: "var(--accent-cyan)", marginBottom: "4px" }}>
+            <div className="text-center p-3.5 sm:p-4 bg-cyan-400/10 border border-cyan-400/30 rounded-xl">
+              <div className="inline-flex text-[var(--accent-cyan)] mb-1">
                 <Server size={22} />
               </div>
-              <div style={{ fontWeight: 700, fontSize: "clamp(0.82rem, 2vw, 0.95rem)", color: "var(--text-primary)" }}>gsocketio Server</div>
-              <div style={{ fontSize: "0.74rem", color: "var(--accent-cyan)" }}>Pure Go Stdlib</div>
+              <div className="font-bold text-xs sm:text-sm text-[var(--text-primary)]">
+                gsocketio Server
+              </div>
+              <div className="text-[0.72rem] text-[var(--accent-cyan)]">Pure Go Stdlib</div>
             </div>
           </div>
 
           {/* Packet Content Description */}
           <div>
-            <h4 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: "8px" }}>
+            <h3 className="text-base sm:text-lg font-bold text-[var(--text-primary)] mb-2">
               {steps[activeStep].title}
-            </h4>
-            <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem", marginBottom: "16px", lineHeight: 1.5 }}>
+            </h3>
+            <p className="text-[var(--text-secondary)] text-xs sm:text-sm mb-4 leading-relaxed">
               {steps[activeStep].desc}
             </p>
 
-            <div
-              style={{
-                background: "#080c14",
-                border: "1px solid rgba(0, 242, 254, 0.3)",
-                borderRadius: "var(--radius-sm)",
-                padding: "14px 18px",
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.88rem",
-                color: "#38bdf8",
-                whiteSpace: "pre-wrap",
-                wordBreak: "break-all",
-                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.25)",
-              }}
-            >
+            <div className="bg-[#080c14] border border-cyan-400/30 rounded-xl p-3.5 sm:p-4 font-mono text-xs sm:text-sm text-sky-400 whitespace-pre-wrap break-all shadow-lg">
               {steps[activeStep].wire}
             </div>
           </div>

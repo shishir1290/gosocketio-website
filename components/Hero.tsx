@@ -11,8 +11,8 @@ import { copyToClipboard } from "@/lib/clipboard";
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [copied, setCopied] = useState(false);
-  const [packetsCount, setPacketsCount] = useState(14829);
-  const [activeClients, setActiveClients] = useState(128);
+  const [packetsCount, setPacketsCount] = useState(15156);
+  const [activeClients, setActiveClients] = useState(129);
 
   // Live telemetry ticker
   useEffect(() => {
@@ -64,19 +64,14 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      style={{
-        position: "relative",
-        paddingTop: "110px",
-        paddingBottom: "60px",
-        overflow: "hidden",
-      }}
+      className="relative pt-[120px] pb-[100px] overflow-visible text-center"
     >
       <div className="hero-glow" />
       <div className="grid-overlay" />
 
-      <div className="container" style={{ position: "relative", zIndex: 1, textAlign: "center" }}>
+      <div className="container relative z-10 mx-auto px-4 sm:px-6 max-w-[1240px]">
         {/* Top Feature Badge */}
-        <div className="hero-badge" style={{ marginBottom: "24px" }}>
+        <div className="hero-badge mb-6 flex justify-center">
           <div className="badge badge-cyan pulse-glow">
             <Sparkles size={14} />
             <span>Zero Third-Party Dependencies • Pure Go Standard Library</span>
@@ -84,93 +79,34 @@ export default function Hero() {
         </div>
 
         {/* Hero Title */}
-        <h1
-          className="hero-title"
-          style={{
-            fontSize: "clamp(2.4rem, 5vw, 4rem)",
-            fontWeight: 800,
-            lineHeight: 1.15,
-            letterSpacing: "-0.03em",
-            maxWidth: "960px",
-            margin: "0 auto 20px auto",
-          }}
-        >
+        <h1 className="hero-title text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-[1.15] max-w-4xl mx-auto mb-5 text-[var(--text-primary)]">
           High-Performance <span className="gradient-cyan-purple">Socket.IO v4</span> Server Built Purely in Go
         </h1>
 
         {/* Subtitle */}
-        <p
-          className="hero-sub"
-          style={{
-            fontSize: "clamp(1.02rem, 1.8vw, 1.18rem)",
-            color: "var(--text-secondary)",
-            maxWidth: "780px",
-            margin: "0 auto 28px auto",
-            lineHeight: 1.6,
-          }}
-        >
+        <p className="hero-sub text-base sm:text-lg text-[var(--text-secondary)] max-w-3xl mx-auto mb-8 leading-relaxed">
           Zero Gorilla. Zero external packages. Hand-crafted RFC 6455 WebSocket framing, Engine.IO v4 long-polling, 
           instant client connection upgrades, string & binary event broadcasting, thread-safe rooms, and sub-millisecond latencies.
         </p>
 
         {/* Install Command & Action Buttons */}
-        <div
-          className="hero-cta-group"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "18px",
-            marginBottom: "44px",
-          }}
-        >
+        <div className="hero-cta-group flex flex-col items-center gap-5 mb-14">
           {/* Quick Install Bar */}
           <div
             onClick={handleCopyCmd}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "12px",
-              padding: "8px 16px",
-              background: "var(--bg-glass)",
-              border: "1px solid var(--border-active)",
-              borderRadius: "var(--radius-full)",
-              cursor: "pointer",
-              boxShadow: "var(--shadow-cyan-glow)",
-              transition: "all 0.25s ease",
-              maxWidth: "100%",
-              overflow: "hidden",
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--accent-cyan)")}
-            onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border-active)")}
+            className="inline-flex items-center gap-3 px-4 py-2 bg-[var(--bg-glass)] border border-[var(--border-active)] rounded-full cursor-pointer shadow-[var(--shadow-cyan-glow)] transition-all duration-250 max-w-full hover:border-[var(--accent-cyan)]"
           >
-            <span style={{ color: "var(--accent-cyan)", fontFamily: "var(--font-mono)", fontSize: "0.95rem" }}>$</span>
-            <code
-              style={{
-                color: "var(--text-primary)",
-                fontSize: "clamp(0.78rem, 2.5vw, 0.92rem)",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
-            >
+            <span className="text-[var(--accent-cyan)] font-mono text-sm font-semibold">$</span>
+            <code className="text-[var(--text-primary)] text-xs sm:text-sm font-mono truncate">
               go get github.com/shishir1290/gsocketio@latest
             </code>
             <button
               type="button"
-              style={{
-                background: copied ? "rgba(16, 185, 129, 0.2)" : "rgba(99, 102, 241, 0.15)",
-                border: "none",
-                borderRadius: "var(--radius-full)",
-                color: copied ? "var(--accent-emerald)" : "var(--text-primary)",
-                padding: "6px 12px",
-                fontSize: "0.78rem",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-                cursor: "pointer",
-                flexShrink: 0,
-              }}
+              className={`flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-full shrink-0 transition-colors ${
+                copied
+                  ? "bg-emerald-500/20 text-[var(--accent-emerald)]"
+                  : "bg-indigo-500/15 text-[var(--text-primary)] hover:bg-indigo-500/25"
+              }`}
             >
               {copied ? <Check size={13} /> : <Copy size={13} />}
               <span>{copied ? "Copied" : "Copy"}</span>
@@ -178,141 +114,95 @@ export default function Hero() {
           </div>
 
           {/* Action CTAs */}
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "14px" }}>
+          <div className="flex flex-wrap justify-center gap-3.5">
             <a href="#steps" className="btn-primary">
               <span>Explore Step-by-Step Guide</span>
               <ArrowRight size={17} />
             </a>
             <a href="#playground" className="btn-secondary">
-              <Radio size={17} color="var(--accent-cyan)" />
+              <Radio size={17} className="text-[var(--accent-cyan)]" />
               <span>Launch Live Simulator</span>
             </a>
           </div>
         </div>
 
         {/* Live Feature & Metrics Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-            gap: "20px",
-            maxWidth: "1100px",
-            margin: "0 auto",
-            textAlign: "left",
-          }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-[1140px] mx-auto text-left items-stretch">
           {/* Card 1 */}
-          <div className="glass-panel hero-stats-card" style={{ padding: "24px" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-              <div
-                style={{
-                  width: "42px",
-                  height: "42px",
-                  borderRadius: "12px",
-                  background: "rgba(0, 242, 254, 0.12)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--accent-cyan)",
-                }}
-              >
-                <ShieldCheck size={22} />
+          <div className="glass-panel hero-stats-card p-6 flex flex-col justify-between min-h-[205px]">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-10 h-10 rounded-xl bg-cyan-500/12 flex items-center justify-center text-[var(--accent-cyan)]">
+                  <ShieldCheck size={22} />
+                </div>
+                <span className="badge badge-emerald">0 Dependencies</span>
               </div>
-              <span className="badge badge-emerald">0 Dependencies</span>
+              <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">
+                100% Go Stdlib
+              </h3>
+              <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
+                Engine.IO v4 protocol, WebSocket parser & RFC 6455 framing written purely in standard Go.
+              </p>
             </div>
-            <h3 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "6px" }}>100% Go Stdlib</h3>
-            <p style={{ color: "var(--text-secondary)", fontSize: "0.88rem", lineHeight: 1.5 }}>
-              Engine.IO v4 protocol, WebSocket parser & RFC 6455 framing written purely in standard Go.
-            </p>
           </div>
 
           {/* Card 2 */}
-          <div className="glass-panel hero-stats-card" style={{ padding: "24px" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-              <div
-                style={{
-                  width: "42px",
-                  height: "42px",
-                  borderRadius: "12px",
-                  background: "rgba(99, 102, 241, 0.12)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--accent-indigo)",
-                }}
-              >
-                <Zap size={22} />
+          <div className="glass-panel hero-stats-card p-6 flex flex-col justify-between min-h-[205px]">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-10 h-10 rounded-xl bg-indigo-500/12 flex items-center justify-center text-[var(--accent-indigo)]">
+                  <Zap size={22} />
+                </div>
+                <span className="badge badge-cyan floating-indicator flex items-center gap-1">
+                  <Zap size={12} />
+                  <span>Upgrade</span>
+                </span>
               </div>
-              <span className="badge badge-cyan floating-indicator" style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                <Zap size={12} />
-                <span>Upgrade</span>
-              </span>
+              <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">
+                HTTP Polling → WS
+              </h3>
+              <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
+                Seamless automatic transport fallback and handshake upgrade with zero packet loss.
+              </p>
             </div>
-            <h3 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "6px" }}>HTTP Polling → WS</h3>
-            <p style={{ color: "var(--text-secondary)", fontSize: "0.88rem", lineHeight: 1.5 }}>
-              Seamless automatic transport fallback and handshake upgrade with zero packet loss.
-            </p>
           </div>
 
           {/* Card 3 */}
-          <div className="glass-panel hero-stats-card" style={{ padding: "24px" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-              <div
-                style={{
-                  width: "42px",
-                  height: "42px",
-                  borderRadius: "12px",
-                  background: "rgba(168, 85, 247, 0.12)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--accent-purple)",
-                }}
-              >
-                <Cpu size={22} />
+          <div className="glass-panel hero-stats-card p-6 flex flex-col justify-between min-h-[205px]">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-10 h-10 rounded-xl bg-purple-500/12 flex items-center justify-center text-[var(--accent-purple)]">
+                  <Cpu size={22} />
+                </div>
+                <span className="badge text-[var(--accent-purple)] border-purple-500/30">
+                  Binary 0x02
+                </span>
               </div>
-              <span className="badge" style={{ color: "#e879f9", borderColor: "rgba(232, 121, 249, 0.3)" }}>
-                Binary 0x02
-              </span>
+              <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2">
+                Native Binary Streams
+              </h3>
+              <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
+                Pass raw []byte byte-buffers directly over WebSocket frames without base64 overhead.
+              </p>
             </div>
-            <h3 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "6px" }}>Native Binary Streams</h3>
-            <p style={{ color: "var(--text-secondary)", fontSize: "0.88rem", lineHeight: 1.5 }}>
-              Pass raw []byte byte-buffers directly over WebSocket frames without base64 overhead.
-            </p>
           </div>
 
           {/* Card 4 - Live Telemetry */}
-          <div
-            className="glass-panel hero-stats-card"
-            style={{
-              padding: "24px",
-              background: "var(--bg-card)",
-              border: "1px solid var(--border-active)",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-              <div
-                style={{
-                  width: "42px",
-                  height: "42px",
-                  borderRadius: "12px",
-                  background: "rgba(16, 185, 129, 0.12)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "var(--accent-emerald)",
-                }}
-              >
-                <Activity size={22} />
+          <div className="glass-panel hero-stats-card p-6 flex flex-col justify-between min-h-[205px] border-[var(--border-active)]">
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-10 h-10 rounded-xl bg-emerald-500/12 flex items-center justify-center text-[var(--accent-emerald)]">
+                  <Activity size={22} />
+                </div>
+                <span className="text-xs font-semibold text-[var(--accent-emerald)]">● Live Telemetry</span>
               </div>
-              <span style={{ fontSize: "0.78rem", color: "var(--accent-emerald)", fontWeight: 600 }}>● Live Telemetry</span>
+              <div className="text-2xl font-extrabold text-[var(--text-primary)] mb-1">
+                {packetsCount.toLocaleString()} <span className="text-sm font-normal text-[var(--text-secondary)]">pkts/s</span>
+              </div>
+              <p className="text-[var(--text-secondary)] text-xs sm:text-sm leading-normal">
+                Active Sessions: <strong className="text-[var(--text-primary)]">{activeClients}</strong> • Latency: &lt; 0.2ms
+              </p>
             </div>
-            <div style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--text-primary)", marginBottom: "2px" }}>
-              {packetsCount.toLocaleString()} <span style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>pkts/s</span>
-            </div>
-            <p style={{ color: "var(--text-secondary)", fontSize: "0.82rem" }}>
-              Active Sessions: <strong style={{ color: "var(--text-primary)" }}>{activeClients}</strong> • Latency: &lt; 0.2ms
-            </p>
           </div>
         </div>
       </div>

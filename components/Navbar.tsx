@@ -45,36 +45,22 @@ export default function Navbar() {
 
   return (
     <header
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-        transition: "all 0.3s ease",
-        background: scrolled ? "var(--bg-nav)" : "var(--bg-glass)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        borderBottom: "1px solid var(--border-subtle)",
-        padding: scrolled ? "10px 0" : "14px 0",
-      }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b border-[var(--border-subtle)] backdrop-blur-xl ${
+        scrolled ? "bg-[var(--bg-nav)] py-2.5 shadow-sm" : "bg-[var(--bg-glass)] py-3.5"
+      }`}
     >
-      <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div className="container flex items-center justify-between">
         {/* Brand Logo */}
         <Link
           href="/"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            textDecoration: "none",
-          }}
+          className="inline-flex items-center no-underline"
           onClick={handleLinkClick}
         >
           <Logo size={34} showText={true} badge="v1.0.4" />
         </Link>
 
         {/* Desktop Navigation Links */}
-        <nav className="desktop-nav" style={{ display: "flex", alignItems: "center", gap: "24px" }} aria-label="Main Navigation">
+        <nav className="hidden md:flex items-center gap-6" aria-label="Main Navigation">
           {navLinks.map((item) => {
             const Icon = item.icon;
             return (
@@ -82,18 +68,7 @@ export default function Navbar() {
                 key={item.href}
                 href={item.href}
                 aria-label={item.aria}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px",
-                  color: "var(--text-secondary)",
-                  textDecoration: "none",
-                  fontSize: "0.92rem",
-                  fontWeight: 500,
-                  transition: "color 0.2s ease",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text-primary)")}
-                onMouseLeave={(e) => (e.currentTarget.style.color = "var(--text-secondary)")}
+                className="flex items-center gap-1.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-[0.92rem] font-medium transition-colors"
               >
                 <Icon size={16} /> {item.label}
               </Link>
@@ -102,23 +77,22 @@ export default function Navbar() {
         </nav>
 
         {/* Right Action Group: Theme Toggle & GitHub */}
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <div className="flex items-center gap-2.5">
           {/* Theme Toggle */}
           <ThemeToggle />
 
           {/* GitHub Button (Desktop) */}
-          <div className="desktop-nav">
+          <div className="hidden sm:block">
             <a
               href="https://github.com/shishir1290/gsocketio"
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Star gsocketio on GitHub"
-              className="btn-secondary"
-              style={{ padding: "7px 15px", fontSize: "0.86rem", display: "inline-flex", alignItems: "center", gap: "6px" }}
+              className="btn-secondary py-2 px-3.5 text-xs font-semibold inline-flex items-center gap-1.5"
             >
-              <Github size={16} />
+              <Github size={15} />
               <span>GitHub</span>
-              <span style={{ display: "flex", alignItems: "center", gap: "3px", color: "var(--accent-amber)" }}>
+              <span className="flex items-center gap-0.5 text-[var(--accent-amber)]">
                 <Star size={13} fill="currentColor" />
               </span>
             </a>
@@ -127,22 +101,10 @@ export default function Navbar() {
           {/* Mobile Hamburger Button */}
           <motion.button
             type="button"
-            className="mobile-menu-btn"
+            className="flex md:hidden items-center justify-center w-9 h-9 rounded-lg bg-white/5 border border-[var(--border-subtle)] text-[var(--text-primary)] cursor-pointer"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             whileTap={{ scale: 0.9 }}
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-            style={{
-              display: "none",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "38px",
-              height: "38px",
-              borderRadius: "var(--radius-sm)",
-              background: "rgba(255, 255, 255, 0.05)",
-              border: "1px solid var(--border-subtle)",
-              color: "var(--text-primary)",
-              cursor: "pointer",
-            }}
           >
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </motion.button>
@@ -157,16 +119,10 @@ export default function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              overflow: "hidden",
-              background: "var(--bg-nav)",
-              backdropFilter: "blur(24px)",
-              WebkitBackdropFilter: "blur(24px)",
-              borderBottom: "1px solid var(--border-subtle)",
-            }}
+            className="overflow-hidden bg-[var(--bg-nav)] backdrop-blur-2xl border-b border-[var(--border-subtle)] md:hidden"
           >
-            <div className="container" style={{ padding: "20px 24px 28px 24px" }}>
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            <div className="container py-5 px-4 sm:px-6">
+              <div className="flex flex-col gap-2">
                 {navLinks.map((item, idx) => {
                   const Icon = item.icon;
                   return (
@@ -179,21 +135,9 @@ export default function Navbar() {
                       <Link
                         href={item.href}
                         onClick={handleLinkClick}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "12px",
-                          padding: "12px 16px",
-                          borderRadius: "var(--radius-sm)",
-                          color: "var(--text-primary)",
-                          textDecoration: "none",
-                          fontSize: "0.98rem",
-                          fontWeight: 600,
-                          background: "rgba(255, 255, 255, 0.03)",
-                          border: "1px solid var(--border-subtle)",
-                        }}
+                        className="flex items-center gap-3 p-3 rounded-lg text-[var(--text-primary)] text-sm font-semibold bg-white/[0.03] border border-[var(--border-subtle)] hover:border-[var(--border-active)] transition-colors no-underline"
                       >
-                        <span style={{ color: "var(--accent-cyan)", display: "flex" }}>
+                        <span className="text-[var(--accent-cyan)] flex">
                           <Icon size={18} />
                         </span>
                         <span>{item.label}</span>
@@ -204,18 +148,17 @@ export default function Navbar() {
               </div>
 
               {/* Mobile CTA Buttons */}
-              <div style={{ marginTop: "20px", display: "flex", flexDirection: "column", gap: "10px" }}>
+              <div className="mt-5 flex flex-col gap-2.5">
                 <a
                   href="https://github.com/shishir1290/gsocketio"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleLinkClick}
-                  className="btn-primary"
-                  style={{ width: "100%", justifyContent: "center", padding: "12px" }}
+                  className="btn-primary w-full justify-center py-3 text-sm"
                 >
                   <Github size={18} />
                   <span>Star on GitHub</span>
-                  <Star size={14} fill="currentColor" color="var(--accent-amber)" />
+                  <Star size={14} fill="currentColor" className="text-[var(--accent-amber)]" />
                 </a>
 
                 <a
@@ -223,8 +166,7 @@ export default function Navbar() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleLinkClick}
-                  className="btn-secondary"
-                  style={{ width: "100%", justifyContent: "center", padding: "11px" }}
+                  className="btn-secondary w-full justify-center py-2.5 text-sm"
                 >
                   <ExternalLink size={16} />
                   <span>pkg.go.dev Documentation</span>
