@@ -46,9 +46,10 @@ export default function Navbar() {
         </Link>
 
         {/* Navigation Links */}
-        <nav style={{ display: "flex", alignItems: "center", gap: "28px" }}>
+        <nav style={{ display: "flex", alignItems: "center", gap: "28px" }} aria-label="Main Navigation">
           <Link
             href="#steps"
+            aria-label="Implementation Guide Tutorial"
             style={{
               display: "flex",
               alignItems: "center",
@@ -67,6 +68,7 @@ export default function Navbar() {
 
           <Link
             href="#clients"
+            aria-label="Cross Platform Client SDKs"
             style={{
               display: "flex",
               alignItems: "center",
@@ -85,6 +87,7 @@ export default function Navbar() {
 
           <Link
             href="#protocol"
+            aria-label="Engine.IO Wire Protocol Specification"
             style={{
               display: "flex",
               alignItems: "center",
@@ -103,6 +106,7 @@ export default function Navbar() {
 
           <Link
             href="#playground"
+            aria-label="Interactive Live WebSocket Simulator"
             style={{
               display: "flex",
               alignItems: "center",
@@ -121,6 +125,7 @@ export default function Navbar() {
 
           <Link
             href="#api"
+            aria-label="Browse Go API Reference"
             style={{
               display: "flex",
               alignItems: "center",
@@ -144,6 +149,7 @@ export default function Navbar() {
             href="https://github.com/shishir1290/gsocketio"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Star gsocketio on GitHub"
             className="btn-secondary"
             style={{ padding: "8px 16px", fontSize: "0.86rem" }}
           >

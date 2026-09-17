@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s | gsocketio",
   },
   description:
-    "A zero-dependency Socket.IO v4 and Engine.IO v4 server built purely with the Go standard library. Features hand-written RFC 6455 WebSockets, automatic polling upgrades, rooms, namespaces, binary attachments, and sub-millisecond latency.",
+    "High-performance, zero-dependency Socket.IO v4 and Engine.IO v4 server built purely in Go with RFC 6455 WebSockets and sub-millisecond latency.",
   applicationName: "gsocketio",
   authors: [{ name: "Md. Sadmanur Islam Shishir", url: "https://github.com/shishir1290" }],
   generator: "Next.js",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "gsocketio — Pure-Go Socket.IO v4 & Engine.IO Server",
     description:
-      "Zero third-party dependencies. Hand-written RFC 6455 WebSocket framing, Engine.IO v4 polling & upgrade, namespaces, rooms, and binary events.",
+      "High-performance, zero-dependency Socket.IO v4 and Engine.IO v4 server built purely in Go with RFC 6455 WebSockets and sub-millisecond latency.",
     url: "https://gsocketio.vercel.app",
     siteName: "gsocketio",
     locale: "en_US",
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "gsocketio — Pure-Go Socket.IO v4 Server",
     description:
-      "Zero third-party dependencies. Hand-written RFC 6455 WebSockets, Engine.IO v4 polling/upgrade, rooms, and binary events in pure Go.",
+      "High-performance, zero-dependency Socket.IO v4 and Engine.IO v4 server built purely in Go with RFC 6455 WebSockets and sub-millisecond latency.",
     creator: "@shishir1290",
     images: ["/opengraph-image"],
   },
