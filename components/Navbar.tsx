@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Zap, BookOpen, Terminal, Layers, Play, Github, Star } from "lucide-react";
+import { BookOpen, Terminal, Layers, Play, Github, Star } from "lucide-react";
+import Logo from "@/components/Logo";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -35,36 +36,12 @@ export default function Navbar() {
         <Link
           href="/"
           style={{
-            display: "flex",
+            display: "inline-flex",
             alignItems: "center",
-            gap: "10px",
             textDecoration: "none",
-            color: "#fff",
-            fontWeight: 800,
-            fontSize: "1.25rem",
-            letterSpacing: "-0.02em",
           }}
         >
-          <div
-            style={{
-              width: "36px",
-              height: "36px",
-              borderRadius: "10px",
-              background: "linear-gradient(135deg, #00f2fe 0%, #4facfe 50%, #6366f1 100%)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "0 0 20px rgba(0, 242, 254, 0.4)",
-            }}
-          >
-            <Zap size={20} color="#07090e" strokeWidth={2.8} />
-          </div>
-          <span>
-            g<span className="gradient-cyan-purple">socketio</span>
-          </span>
-          <span className="badge badge-cyan" style={{ fontSize: "0.7rem", padding: "2px 8px" }}>
-            v1.0.4
-          </span>
+          <Logo size={36} showText={true} badge="v1.0.4" />
         </Link>
 
         {/* Navigation Links */}

@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Zap, Github, Heart } from "lucide-react";
+import { Github, Heart } from "lucide-react";
+import Logo from "@/components/Logo";
 
 export default function Footer() {
   return (
@@ -25,23 +26,8 @@ export default function Footer() {
         >
           {/* Logo & Desc */}
           <div style={{ maxWidth: "420px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
-              <div
-                style={{
-                  width: "30px",
-                  height: "30px",
-                  borderRadius: "8px",
-                  background: "linear-gradient(135deg, #00f2fe 0%, #6366f1 100%)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <Zap size={16} color="#07090e" strokeWidth={2.8} />
-              </div>
-              <span style={{ fontWeight: 800, fontSize: "1.15rem", color: "#fff" }}>
-                g<span className="gradient-cyan-purple">socketio</span>
-              </span>
+            <div style={{ marginBottom: "12px" }}>
+              <Logo size={32} showText={true} glow={false} />
             </div>
             <p style={{ color: "var(--text-muted)", fontSize: "0.88rem", lineHeight: 1.6 }}>
               Pure-Go Socket.IO v4 & Engine.IO v4 server. Zero third-party dependencies, maximum throughput, and cross-platform client compatibility.
