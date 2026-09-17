@@ -1,5 +1,9 @@
 # gsocketio Website & Documentation Portal
 
+[![Website](https://img.shields.io/badge/website-gsocketio.vercel.app-blue?style=flat-square&logo=vercel)](https://gsocketio.vercel.app)
+[![Go Reference](https://pkg.go.dev/badge/github.com/shishir1290/gsocketio.svg)](https://pkg.go.dev/github.com/shishir1290/gsocketio)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+
 This repository contains the official Next.js website and documentation portal for **[gsocketio](https://github.com/shishir1290/gsocketio)** — the zero-dependency pure-Go Socket.IO v4 server.
 
 ## Features

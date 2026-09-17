@@ -36,13 +36,17 @@ export const metadata: Metadata = {
   ],
   creator: "Md. Sadmanur Islam Shishir",
   publisher: "gsocketio",
+  category: "technology",
+  classification: "Software / Real-Time WebSocket Networking",
+  referrer: "origin-when-cross-origin",
+  manifest: "/manifest.webmanifest",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   alternates: {
-    canonical: "/",
+    canonical: "https://gsocketio.vercel.app",
   },
   icons: {
     icon: [
@@ -55,7 +59,7 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "gsocketio — Pure-Go Socket.IO v4 & Engine.IO Server",
+    title: "gsocketio — High-Performance Pure-Go Socket.IO v4 Server",
     description:
       "High-performance, zero-dependency Socket.IO v4 and Engine.IO v4 server built purely in Go with RFC 6455 WebSockets and sub-millisecond latency.",
     url: "https://gsocketio.vercel.app",
@@ -64,20 +68,22 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/opengraph-image",
+        url: "https://gsocketio.vercel.app/opengraph-image",
         width: 1200,
         height: 630,
+        type: "image/png",
         alt: "gsocketio — High-Performance Pure-Go Socket.IO v4 Server",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "gsocketio — Pure-Go Socket.IO v4 Server",
+    site: "@shishir1290",
+    creator: "@shishir1290",
+    title: "gsocketio — High-Performance Pure-Go Socket.IO v4 Server",
     description:
       "High-performance, zero-dependency Socket.IO v4 and Engine.IO v4 server built purely in Go with RFC 6455 WebSockets and sub-millisecond latency.",
-    creator: "@shishir1290",
-    images: ["/opengraph-image"],
+    images: ["https://gsocketio.vercel.app/opengraph-image"],
   },
   robots: {
     index: true,
@@ -90,12 +96,24 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  other: {
+    "revisit-after": "7 days",
+    distribution: "global",
+    rating: "general",
+  },
 };
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "gsocketio",
+  url: "https://gsocketio.vercel.app",
+  sameAs: [
+    "https://github.com/shishir1290/gsocketio",
+    "https://pkg.go.dev/github.com/shishir1290/gsocketio",
+    "https://twitter.com/shishir1290",
+    "https://github.com/shishir1290",
+  ],
   operatingSystem: "Linux, macOS, Windows",
   applicationCategory: "DeveloperApplication",
   programmingLanguage: "Go",
@@ -107,11 +125,15 @@ const jsonLd = {
     priceCurrency: "USD",
   },
   description:
-    "Zero-dependency Socket.IO v4 and Engine.IO v4 server for Go applications built purely with the Go standard library.",
+    "High-performance, zero-dependency Socket.IO v4 and Engine.IO v4 server built purely in Go with RFC 6455 WebSockets and sub-millisecond latency.",
   author: {
     "@type": "Person",
     name: "Md. Sadmanur Islam Shishir",
     url: "https://github.com/shishir1290",
+    sameAs: [
+      "https://github.com/shishir1290",
+      "https://twitter.com/shishir1290",
+    ],
   },
   publisher: {
     "@type": "Person",
@@ -128,7 +150,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
