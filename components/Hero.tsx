@@ -6,6 +6,8 @@ import { useGSAP } from "@gsap/react";
 import { ArrowRight, Check, Copy, ShieldCheck, Zap, Activity, Cpu, Radio, Sparkles } from "lucide-react";
 import confetti from "canvas-confetti";
 
+import { copyToClipboard } from "@/lib/clipboard";
+
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [copied, setCopied] = useState(false);
@@ -25,11 +27,16 @@ export default function Hero() {
     () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      tl.from(".hero-badge", { y: -20, opacity: 0, duration: 0.6 })
-        .from(".hero-title", { y: 30, opacity: 0, duration: 0.8 }, "-=0.3")
-        .from(".hero-sub", { y: 20, opacity: 0, duration: 0.6 }, "-=0.4")
-        .from(".hero-cta-group", { y: 20, opacity: 0, duration: 0.6 }, "-=0.3")
-        .from(".hero-stats-card", { scale: 0.95, opacity: 0, stagger: 0.15, duration: 0.7 }, "-=0.3");
+      tl.fromTo(".hero-badge", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 })
+        .fromTo(".hero-title", { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, "-=0.25")
+        .fromTo(".hero-sub", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, "-=0.3")
+        .fromTo(".hero-cta-group", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, "-=0.25")
+        .fromTo(
+          ".hero-stats-card",
+          { scale: 0.95, opacity: 0, y: 20 },
+          { scale: 1, opacity: 1, y: 0, stagger: 0.1, duration: 0.6, clearProps: "transform,opacity" },
+          "-=0.2"
+        );
 
       gsap.to(".floating-indicator", {
         y: -6,
@@ -42,8 +49,8 @@ export default function Hero() {
     { scope: containerRef }
   );
 
-  const handleCopyCmd = () => {
-    navigator.clipboard.writeText("go get github.com/shishir1290/gsocketio@latest");
+  const handleCopyCmd = async () => {
+    await copyToClipboard("go get github.com/shishir1290/gsocketio@latest");
     setCopied(true);
     confetti({
       particleCount: 40,
@@ -59,8 +66,8 @@ export default function Hero() {
       ref={containerRef}
       style={{
         position: "relative",
-        paddingTop: "140px",
-        paddingBottom: "80px",
+        paddingTop: "110px",
+        paddingBottom: "60px",
         overflow: "hidden",
       }}
     >
@@ -80,12 +87,12 @@ export default function Hero() {
         <h1
           className="hero-title"
           style={{
-            fontSize: "clamp(2.6rem, 5.5vw, 4.4rem)",
+            fontSize: "clamp(2.4rem, 5vw, 4rem)",
             fontWeight: 800,
-            lineHeight: 1.12,
+            lineHeight: 1.15,
             letterSpacing: "-0.03em",
             maxWidth: "960px",
-            margin: "0 auto 24px auto",
+            margin: "0 auto 20px auto",
           }}
         >
           High-Performance <span className="gradient-cyan-purple">Socket.IO v4</span> Server Built Purely in Go
@@ -95,10 +102,10 @@ export default function Hero() {
         <p
           className="hero-sub"
           style={{
-            fontSize: "clamp(1.05rem, 2vw, 1.25rem)",
+            fontSize: "clamp(1.02rem, 1.8vw, 1.18rem)",
             color: "var(--text-secondary)",
             maxWidth: "760px",
-            margin: "0 auto 36px auto",
+            margin: "0 auto 28px auto",
             lineHeight: 1.6,
           }}
         >
@@ -113,8 +120,8 @@ export default function Hero() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: "20px",
-            marginBottom: "60px",
+            gap: "18px",
+            marginBottom: "44px",
           }}
         >
           {/* Quick Install Bar */}
@@ -222,7 +229,10 @@ export default function Hero() {
               >
                 <Zap size={22} />
               </div>
-              <span className="badge badge-cyan floating-indicator">⚡ Upgrade</span>
+              <span className="badge badge-cyan floating-indicator" style={{ display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                <Zap size={12} />
+                <span>Upgrade</span>
+              </span>
             </div>
             <h3 style={{ fontSize: "1.1rem", fontWeight: 700, marginBottom: "6px" }}>HTTP Polling → WS</h3>
             <p style={{ color: "var(--text-secondary)", fontSize: "0.88rem", lineHeight: 1.5 }}>

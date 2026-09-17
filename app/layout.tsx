@@ -62,6 +62,14 @@ export const metadata: Metadata = {
     siteName: "gsocketio",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "gsocketio — High-Performance Pure-Go Socket.IO v4 Server",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -69,6 +77,7 @@ export const metadata: Metadata = {
     description:
       "Zero third-party dependencies. Hand-written RFC 6455 WebSockets, Engine.IO v4 polling/upgrade, rooms, and binary events in pure Go.",
     creator: "@shishir1290",
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,
@@ -89,19 +98,27 @@ const jsonLd = {
   name: "gsocketio",
   operatingSystem: "Linux, macOS, Windows",
   applicationCategory: "DeveloperApplication",
+  programmingLanguage: "Go",
+  license: "https://opensource.org/licenses/MIT",
+  codeRepository: "https://github.com/shishir1290/gsocketio",
   offers: {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
   },
   description:
-    "Zero-dependency Socket.IO v4 and Engine.IO v4 server for Go applications with standard library networking.",
+    "Zero-dependency Socket.IO v4 and Engine.IO v4 server for Go applications built purely with the Go standard library.",
   author: {
     "@type": "Person",
     name: "Md. Sadmanur Islam Shishir",
     url: "https://github.com/shishir1290",
   },
-  downloadUrl: "https://github.com/shishir1290/gsocketio",
+  publisher: {
+    "@type": "Person",
+    name: "Md. Sadmanur Islam Shishir",
+    url: "https://github.com/shishir1290",
+  },
+  downloadUrl: "https://pkg.go.dev/github.com/shishir1290/gsocketio",
   softwareVersion: "v1.0.4",
 };
 

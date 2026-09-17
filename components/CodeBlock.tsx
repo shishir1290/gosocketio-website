@@ -1,7 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Check, Copy, Terminal } from "lucide-react";
+import Prism from "prismjs";
+if (typeof window !== "undefined") {
+  Prism.manual = true;
+}
+import "prismjs/components/prism-go";
+import "prismjs/components/prism-bash";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-dart";
+import "prismjs/components/prism-csharp";
+import "prismjs/components/prism-java";
+import "prismjs/components/prism-kotlin";
+import "prismjs/components/prism-swift";
+import "prismjs/components/prism-json";
+
+import { copyToClipboard } from "@/lib/clipboard";
 
 interface CodeBlockProps {
   code: string;
@@ -9,6 +26,18 @@ interface CodeBlockProps {
   filename?: string;
   showLineNumbers?: boolean;
 }
+
+const normalizeLanguage = (lang: string): string => {
+  const l = (lang || "go").toLowerCase().trim();
+  if (l === "golang") return "go";
+  if (l === "shell" || l === "sh" || l === "terminal") return "bash";
+  if (l === "ts") return "typescript";
+  if (l === "js") return "javascript";
+  if (l === "py") return "python";
+  if (l === "cs") return "csharp";
+  if (l === "kt") return "kotlin";
+  return l;
+};
 
 export default function CodeBlock({
   code,
@@ -19,22 +48,31 @@ export default function CodeBlock({
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(code);
+    const success = await copyToClipboard(code);
+    if (success) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // ignore clipboard error
     }
   };
 
-  const lines = code.trim().split("\n");
+  const cleanCode = code.trim();
+  const rawLines = cleanCode.split("\n");
+  const langKey = normalizeLanguage(language);
+
+  const highlightedHtml = useMemo(() => {
+    const grammar = Prism.languages[langKey] || Prism.languages.go || Prism.languages.plain;
+    try {
+      return Prism.highlight(cleanCode, grammar, langKey);
+    } catch {
+      return cleanCode;
+    }
+  }, [cleanCode, langKey]);
 
   return (
     <div
       style={{
         background: "rgba(10, 14, 23, 0.95)",
-        border: "1px solid rgba(255, 255, 255, 0.09)",
+        border: "1px solid rgba(255, 255, 255, 0.1)",
         borderRadius: "var(--radius-md)",
         overflow: "hidden",
         boxShadow: "0 8px 32px rgba(0, 0, 0, 0.45)",
@@ -95,39 +133,65 @@ export default function CodeBlock({
         </button>
       </div>
 
-      {/* Code body */}
+      {/* Code body with line numbers */}
       <div
         style={{
-          padding: "16px",
           maxHeight: "540px",
-          overflowY: "auto",
-          fontFamily: "var(--font-mono)",
-          fontSize: "0.86rem",
-          lineHeight: "1.65",
+          overflow: "auto",
+          background: "#080b12",
         }}
       >
-        <pre style={{ margin: 0 }}>
-          <code>
-            {lines.map((line, idx) => (
-              <div key={idx} style={{ display: "flex", gap: "16px" }}>
-                {showLineNumbers && (
-                  <span
-                    style={{
-                      userSelect: "none",
-                      color: "rgba(255, 255, 255, 0.2)",
-                      minWidth: "24px",
-                      textAlign: "right",
-                      fontVariantNumeric: "tabular-nums",
-                    }}
-                  >
-                    {idx + 1}
-                  </span>
-                )}
-                <span style={{ color: "#e2e8f0", wordBreak: "break-all" }}>{line || " "}</span>
-              </div>
-            ))}
-          </code>
-        </pre>
+        <div
+          style={{
+            display: "flex",
+            minWidth: "fit-content",
+            width: "100%",
+            padding: "16px 0",
+          }}
+        >
+          {showLineNumbers && (
+            <div
+              style={{
+                padding: "0 14px 0 16px",
+                userSelect: "none",
+                color: "rgba(255, 255, 255, 0.22)",
+                textAlign: "right",
+                minWidth: "40px",
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.86rem",
+                lineHeight: "1.65",
+                fontVariantNumeric: "tabular-nums",
+                flexShrink: 0,
+              }}
+            >
+              {rawLines.map((_, idx) => (
+                <div key={idx}>{idx + 1}</div>
+              ))}
+            </div>
+          )}
+
+          <div
+            style={{
+              padding: "0 16px 0 4px",
+              flex: 1,
+              fontFamily: "var(--font-mono)",
+              fontSize: "0.86rem",
+              lineHeight: "1.65",
+              minWidth: 0,
+            }}
+          >
+            <pre
+              suppressHydrationWarning
+              style={{ margin: 0, overflow: "visible", whiteSpace: "pre", color: "#e2e8f0" }}
+            >
+              <code
+                suppressHydrationWarning
+                className={`language-${langKey}`}
+                dangerouslySetInnerHTML={{ __html: highlightedHtml }}
+              />
+            </pre>
+          </div>
+        </div>
       </div>
     </div>
   );

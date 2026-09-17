@@ -25,10 +25,11 @@ export default function Navbar() {
         right: 0,
         zIndex: 100,
         transition: "all 0.3s ease",
-        background: scrolled ? "rgba(7, 9, 14, 0.85)" : "transparent",
-        backdropFilter: scrolled ? "blur(18px)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid transparent",
-        padding: "16px 0",
+        background: scrolled ? "rgba(7, 9, 14, 0.92)" : "rgba(7, 9, 14, 0.82)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+        padding: scrolled ? "12px 0" : "16px 0",
       }}
     >
       <div className="container" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>

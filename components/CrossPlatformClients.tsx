@@ -4,7 +4,26 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CLIENT_PLATFORMS } from "@/lib/client-examples";
 import CodeBlock from "./CodeBlock";
-import { Terminal, Globe } from "lucide-react";
+import { Terminal, Globe, Smartphone, AppWindow, Bot, Gamepad2, FileCode2 } from "lucide-react";
+
+const getPlatformLucideIcon = (id: string, size = 16) => {
+  switch (id) {
+    case "javascript":
+      return <Globe size={size} />;
+    case "python":
+      return <Terminal size={size} />;
+    case "flutter":
+      return <Smartphone size={size} />;
+    case "swift":
+      return <AppWindow size={size} />;
+    case "android":
+      return <Bot size={size} />;
+    case "unity":
+      return <Gamepad2 size={size} />;
+    default:
+      return <FileCode2 size={size} />;
+  }
+};
 
 export default function CrossPlatformClients() {
   const [activePlatformId, setActivePlatformId] = useState(CLIENT_PLATFORMS[0].id);
@@ -68,7 +87,9 @@ export default function CrossPlatformClients() {
                   transition: "all 0.2s ease",
                 }}
               >
-                <span>{platform.icon}</span>
+                <span style={{ display: "flex", alignItems: "center", color: isSelected ? "var(--accent-emerald)" : "var(--text-muted)" }}>
+                  {getPlatformLucideIcon(platform.id, 16)}
+                </span>
                 <span>{platform.name}</span>
               </button>
             );
@@ -106,8 +127,9 @@ export default function CrossPlatformClients() {
               }}
             >
               <div>
-                <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "#fff", marginBottom: "4px" }}>
-                  {activePlatform.icon} {activePlatform.name} Integration
+                <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "#fff", marginBottom: "4px", display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ color: "var(--accent-emerald)" }}>{getPlatformLucideIcon(activePlatform.id, 20)}</span>
+                  <span>{activePlatform.name} Integration</span>
                 </h3>
                 <p style={{ color: "var(--text-secondary)", fontSize: "0.88rem" }}>{activePlatform.description}</p>
               </div>

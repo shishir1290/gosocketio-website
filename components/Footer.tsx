@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Github, Heart } from "lucide-react";
+import { Github, Heart, ExternalLink } from "lucide-react";
 import Logo from "@/components/Logo";
 
 export default function Footer() {
@@ -59,8 +59,8 @@ export default function Footer() {
                   </a>
                 </li>
                 <li>
-                  <a href="https://github.com/shishir1290/gsocketio/releases" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-secondary)", textDecoration: "none" }}>
-                    Releases (v1.0.4)
+                  <a href="https://pkg.go.dev/github.com/shishir1290/gsocketio" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-secondary)", textDecoration: "none", display: "flex", alignItems: "center", gap: "6px" }}>
+                    <ExternalLink size={14} /> pkg.go.dev Docs
                   </a>
                 </li>
               </ul>

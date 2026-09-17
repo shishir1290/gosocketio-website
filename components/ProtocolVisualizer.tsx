@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Radio, ArrowRight, ArrowLeft, RefreshCw, Cpu, Activity } from "lucide-react";
+import { Radio, ArrowRight, ArrowLeft, RefreshCw, Cpu, Activity, Laptop, Server } from "lucide-react";
 
 export default function ProtocolVisualizer() {
   const [activeStep, setActiveStep] = useState(0);
@@ -150,7 +150,9 @@ export default function ProtocolVisualizer() {
                 borderRadius: "var(--radius-md)",
               }}
             >
-              <div style={{ fontSize: "1.2rem", marginBottom: "4px" }}>💻</div>
+              <div style={{ display: "inline-flex", color: "var(--accent-indigo)", marginBottom: "6px" }}>
+                <Laptop size={24} />
+              </div>
               <div style={{ fontWeight: 700, fontSize: "0.95rem" }}>Client App</div>
               <div style={{ fontSize: "0.78rem", color: "var(--text-muted)" }}>socket.io-client</div>
             </div>
@@ -185,7 +187,9 @@ export default function ProtocolVisualizer() {
                 borderRadius: "var(--radius-md)",
               }}
             >
-              <div style={{ fontSize: "1.2rem", marginBottom: "4px" }}>🐹</div>
+              <div style={{ display: "inline-flex", color: "var(--accent-cyan)", marginBottom: "6px" }}>
+                <Server size={24} />
+              </div>
               <div style={{ fontWeight: 700, fontSize: "0.95rem" }}>gsocketio Server</div>
               <div style={{ fontSize: "0.78rem", color: "var(--accent-cyan)" }}>Pure Go Stdlib</div>
             </div>
