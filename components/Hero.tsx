@@ -27,14 +27,14 @@ export default function Hero() {
     () => {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      tl.fromTo(".hero-badge", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 })
-        .fromTo(".hero-title", { y: 25, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, "-=0.25")
-        .fromTo(".hero-sub", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, "-=0.3")
-        .fromTo(".hero-cta-group", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 }, "-=0.25")
+      tl.fromTo(".hero-badge", { y: -15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4 })
+        .fromTo(".hero-title", { y: 15 }, { y: 0, duration: 0.5, clearProps: "all" }, "-=0.2")
+        .fromTo(".hero-sub", { y: 15 }, { y: 0, duration: 0.5, clearProps: "all" }, "-=0.3")
+        .fromTo(".hero-cta-group", { y: 15, opacity: 0 }, { y: 0, opacity: 1, duration: 0.45 }, "-=0.25")
         .fromTo(
           ".hero-stats-card",
-          { scale: 0.95, opacity: 0, y: 20 },
-          { scale: 1, opacity: 1, y: 0, stagger: 0.1, duration: 0.6, clearProps: "transform,opacity" },
+          { scale: 0.96, opacity: 0, y: 15 },
+          { scale: 1, opacity: 1, y: 0, stagger: 0.08, duration: 0.5, clearProps: "all" },
           "-=0.2"
         );
 
@@ -104,13 +104,13 @@ export default function Hero() {
           style={{
             fontSize: "clamp(1.02rem, 1.8vw, 1.18rem)",
             color: "var(--text-secondary)",
-            maxWidth: "760px",
+            maxWidth: "780px",
             margin: "0 auto 28px auto",
             lineHeight: 1.6,
           }}
         >
           Zero Gorilla. Zero external packages. Hand-crafted RFC 6455 WebSocket framing, Engine.IO v4 long-polling, 
-          instant transport upgrades, binary buffers, thread-safe rooms, and sub-millisecond latencies.
+          instant client connection upgrades, string & binary event broadcasting, thread-safe rooms, and sub-millisecond latencies.
         </p>
 
         {/* Install Command & Action Buttons */}

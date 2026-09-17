@@ -1,9 +1,27 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
+import { Plus_Jakarta_Sans, Fira_Code } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ParticleBackground from "@/components/ParticleBackground";
 import { ThemeProvider } from "@/components/ThemeProvider";
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-sans",
+  display: "swap",
+  preload: true,
+});
+
+const firaCode = Fira_Code({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-mono",
+  display: "swap",
+  preload: true,
+});
 
 export const viewport: Viewport = {
   themeColor: "#07090e",
@@ -15,11 +33,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://gsocketio.vercel.app"),
   title: {
-    default: "gsocketio — High-Performance Pure-Go Socket.IO v4 Server",
+    default: "gsocketio — High-Performance Go Socket.IO v4 Server for Real-Time Client Connections & Events",
     template: "%s | gsocketio",
   },
   description:
-    "High-performance, zero-dependency Socket.IO v4 and Engine.IO v4 server built purely in Go with RFC 6455 WebSockets and sub-millisecond latency.",
+    "Pure-Go Socket.IO v4 server with zero dependencies. Manage real-time client connections, broadcast string and binary events, and scale high-throughput streams.",
   applicationName: "gsocketio",
   authors: [{ name: "Md. Sadmanur Islam Shishir", url: "https://github.com/shishir1290" }],
   generator: "Next.js",
@@ -28,6 +46,9 @@ export const metadata: Metadata = {
     "socket.io go",
     "golang socket.io",
     "socket.io v4",
+    "client connection",
+    "realtime event stream",
+    "string event broadcast",
     "engine.io go",
     "pure go websocket",
     "zero dependency websocket",
@@ -52,17 +73,18 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/icon", type: "image/png", sizes: "32x32" },
       { url: "/favicon.ico", sizes: "any" },
     ],
     shortcut: "/favicon.svg",
     apple: [
-      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/apple-icon", sizes: "180x180", type: "image/png" },
     ],
   },
   openGraph: {
-    title: "gsocketio — High-Performance Pure-Go Socket.IO v4 Server",
+    title: "gsocketio — High-Performance Go Socket.IO v4 Server for Real-Time Client Connections & Events",
     description:
-      "High-performance, zero-dependency Socket.IO v4 and Engine.IO v4 server built purely in Go with RFC 6455 WebSockets and sub-millisecond latency.",
+      "Pure-Go Socket.IO v4 server with zero dependencies. Manage real-time client connections, broadcast string and binary events, and scale high-throughput streams.",
     url: "https://gsocketio.vercel.app",
     siteName: "gsocketio",
     locale: "en_US",
@@ -81,9 +103,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@shishir1290",
     creator: "@shishir1290",
-    title: "gsocketio — High-Performance Pure-Go Socket.IO v4 Server",
+    title: "gsocketio — High-Performance Go Socket.IO v4 Server for Real-Time Client Connections & Events",
     description:
-      "High-performance, zero-dependency Socket.IO v4 and Engine.IO v4 server built purely in Go with RFC 6455 WebSockets and sub-millisecond latency.",
+      "Pure-Go Socket.IO v4 server with zero dependencies. Manage real-time client connections, broadcast string and binary events, and scale high-throughput streams.",
     images: ["https://gsocketio.vercel.app/opengraph-image"],
   },
   robots: {
@@ -126,7 +148,7 @@ const jsonLd = {
     priceCurrency: "USD",
   },
   description:
-    "High-performance, zero-dependency Socket.IO v4 and Engine.IO v4 server built purely in Go with RFC 6455 WebSockets and sub-millisecond latency.",
+    "Pure-Go Socket.IO v4 server with zero dependencies. Manage real-time client connections, broadcast string and binary events, and scale high-throughput streams.",
   author: {
     "@type": "Person",
     name: "Md. Sadmanur Islam Shishir",
@@ -151,13 +173,45 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" dir="ltr" data-theme="dark" suppressHydrationWarning>
+    <html
+      lang="en"
+      dir="ltr"
+      data-theme="dark"
+      className={`${plusJakarta.variable} ${firaCode.variable}`}
+      suppressHydrationWarning
+    >
       <head>
+        {/* Favicon fallback tags for all SEO crawlers */}
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icon" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="shortcut icon" href="/favicon.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon" />
+
+        {/* Prevent theme flash */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){document.documentElement.setAttribute("data-theme",t);document.documentElement.style.colorScheme=t;}else if(window.matchMedia("(prefers-color-scheme: dark)").matches){document.documentElement.setAttribute("data-theme","dark");document.documentElement.style.colorScheme="dark";}}catch(e){}})();`,
           }}
         />
+
+        {/* Google Analytics (GA4) Integration */}
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID || "G-GSOCKETIO4"}`}
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${process.env.NEXT_PUBLIC_GA_ID || "G-GSOCKETIO4"}', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
+
+        {/* JSON-LD Schema */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
