@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Play, Square, Send, Plus, Trash2, CheckCircle2, Terminal, Activity, Layers } from "lucide-react";
 
 interface LogEntry {
@@ -126,8 +127,14 @@ export default function InteractivePlayground() {
   return (
     <section id="playground" style={{ padding: "90px 0", position: "relative" }}>
       <div className="container">
-        {/* Section Header */}
-        <div style={{ textAlign: "center", marginBottom: "40px" }}>
+        {/* Section Header with Scroll Reveal */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          style={{ textAlign: "center", marginBottom: "40px" }}
+        >
           <div className="badge badge-cyan" style={{ marginBottom: "14px" }}>
             <Activity size={13} />
             <span>Interactive Tool</span>
@@ -145,27 +152,32 @@ export default function InteractivePlayground() {
           <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem", maxWidth: "680px", margin: "0 auto" }}>
             Test handshakes, room subscriptions, and packet inspection live in your browser against simulated gsocketio responses.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Playground Box */}
-        <div
+        {/* Playground Box with Motion */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, delay: 0.1 }}
           className="glass-panel"
           style={{
             maxWidth: "1100px",
             margin: "0 auto",
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
             gap: "0",
             overflow: "hidden",
-            border: "1px solid rgba(99, 102, 241, 0.3)",
+            border: "1px solid var(--border-active)",
+            boxShadow: "var(--shadow-sm)",
           }}
         >
           {/* Controls Column */}
           <div
             style={{
               padding: "24px",
-              background: "rgba(10, 14, 22, 0.95)",
-              borderRight: "1px solid rgba(255, 255, 255, 0.08)",
+              background: "var(--bg-card)",
+              borderRight: "1px solid var(--border-subtle)",
               display: "flex",
               flexDirection: "column",
               gap: "20px",
@@ -183,21 +195,23 @@ export default function InteractivePlayground() {
                     boxShadow: connected ? "0 0 10px #10b981" : "none",
                   }}
                 />
-                <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>
+                <span style={{ fontWeight: 700, fontSize: "0.95rem", color: "var(--text-primary)" }}>
                   {connected ? "Connected" : "Disconnected"}
                 </span>
               </div>
 
               {connected ? (
                 <button
+                  type="button"
                   onClick={handleDisconnect}
                   className="btn-secondary"
-                  style={{ padding: "6px 14px", fontSize: "0.82rem", borderColor: "rgba(239, 68, 68, 0.4)", color: "#f87171" }}
+                  style={{ padding: "6px 14px", fontSize: "0.82rem", borderColor: "rgba(239, 68, 68, 0.4)", color: "#ef4444" }}
                 >
                   <Square size={13} fill="currentColor" /> Disconnect
                 </button>
               ) : (
                 <button
+                  type="button"
                   onClick={handleConnect}
                   className="btn-primary"
                   style={{ padding: "6px 16px", fontSize: "0.82rem" }}
@@ -212,7 +226,7 @@ export default function InteractivePlayground() {
                 style={{
                   padding: "8px 12px",
                   background: "rgba(0, 242, 254, 0.08)",
-                  border: "1px solid rgba(0, 242, 254, 0.2)",
+                  border: "1px solid rgba(0, 242, 254, 0.25)",
                   borderRadius: "var(--radius-sm)",
                   fontSize: "0.82rem",
                   fontFamily: "var(--font-mono)",
@@ -237,14 +251,16 @@ export default function InteractivePlayground() {
                   style={{
                     flex: 1,
                     padding: "9px 12px",
-                    background: "rgba(255, 255, 255, 0.04)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    background: "var(--bg-input)",
+                    border: "1px solid var(--border-subtle)",
                     borderRadius: "var(--radius-sm)",
-                    color: "#fff",
+                    color: "var(--text-primary)",
                     fontSize: "0.86rem",
+                    outline: "none",
                   }}
                 />
                 <button
+                  type="button"
                   onClick={handleJoinRoom}
                   disabled={!connected}
                   className="btn-secondary"
@@ -268,11 +284,12 @@ export default function InteractivePlayground() {
                 placeholder="event name (e.g. chat)"
                 style={{
                   padding: "9px 12px",
-                  background: "rgba(255, 255, 255, 0.04)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  background: "var(--bg-input)",
+                  border: "1px solid var(--border-subtle)",
                   borderRadius: "var(--radius-sm)",
-                  color: "#fff",
+                  color: "var(--text-primary)",
                   fontSize: "0.86rem",
+                  outline: "none",
                 }}
               />
 
@@ -283,17 +300,19 @@ export default function InteractivePlayground() {
                 placeholder='{"key": "value"}'
                 style={{
                   padding: "9px 12px",
-                  background: "rgba(255, 255, 255, 0.04)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  background: "var(--bg-input)",
+                  border: "1px solid var(--border-subtle)",
                   borderRadius: "var(--radius-sm)",
-                  color: "#fff",
+                  color: "var(--text-primary)",
                   fontFamily: "var(--font-mono)",
                   fontSize: "0.82rem",
                   resize: "vertical",
+                  outline: "none",
                 }}
               />
 
               <button
+                type="button"
                 onClick={handleEmitEvent}
                 disabled={!connected}
                 className="btn-primary"
@@ -425,7 +444,7 @@ export default function InteractivePlayground() {
               })}
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

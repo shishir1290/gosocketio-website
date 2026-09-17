@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { API_REFERENCE_DATA } from "@/lib/docs-data";
 import { Search, Code2, BookOpen } from "lucide-react";
 
@@ -17,10 +18,16 @@ export default function ApiReference() {
   })).filter((cat) => cat.items.length > 0);
 
   return (
-    <section id="api" style={{ padding: "90px 0", background: "rgba(10, 14, 22, 0.4)", position: "relative" }}>
+    <section id="api" style={{ padding: "90px 0", position: "relative" }}>
       <div className="container">
-        {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: "40px" }}>
+        {/* Header with Scroll Reveal */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          style={{ textAlign: "center", marginBottom: "40px" }}
+        >
           <div className="badge badge-cyan" style={{ marginBottom: "14px" }}>
             <Code2 size={13} />
             <span>Go API Reference</span>
@@ -54,40 +61,51 @@ export default function ApiReference() {
               style={{
                 width: "100%",
                 padding: "13px 18px 13px 44px",
-                background: "rgba(18, 24, 38, 0.8)",
-                border: "1px solid rgba(255, 255, 255, 0.1)",
+                background: "var(--bg-card)",
+                border: "1px solid var(--border-subtle)",
                 borderRadius: "var(--radius-full)",
-                color: "#fff",
+                color: "var(--text-primary)",
                 fontSize: "0.92rem",
                 outline: "none",
-                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
+                boxShadow: "var(--shadow-sm)",
               }}
             />
           </div>
-        </div>
+        </motion.div>
 
         {/* Categories */}
         <div style={{ display: "flex", flexDirection: "column", gap: "36px", maxWidth: "1020px", margin: "0 auto" }}>
           {filteredCategories.map((cat, idx) => (
-            <div key={idx} className="glass-panel" style={{ padding: "28px" }}>
-              <h3 style={{ fontSize: "1.3rem", fontWeight: 700, color: "#fff", marginBottom: "18px" }}>
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.45, delay: idx * 0.08 }}
+              className="glass-panel"
+              style={{ padding: "clamp(18px, 3vw, 28px)", background: "var(--bg-card)", border: "1px solid var(--border-subtle)" }}
+            >
+              <h3 style={{ fontSize: "1.3rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: "18px" }}>
                 {cat.category}
               </h3>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 {cat.items.map((item, itemIdx) => (
-                  <div
+                  <motion.div
                     key={itemIdx}
+                    whileHover={{ scale: 1.01, x: 3 }}
                     style={{
                       padding: "14px 18px",
-                      background: "rgba(255, 255, 255, 0.02)",
-                      border: "1px solid rgba(255, 255, 255, 0.05)",
+                      background: "var(--bg-input)",
+                      border: "1px solid var(--border-subtle)",
                       borderRadius: "var(--radius-sm)",
                       display: "flex",
                       flexWrap: "wrap",
                       alignItems: "center",
                       justifyContent: "space-between",
                       gap: "12px",
+                      cursor: "default",
+                      transition: "all 0.2s ease",
                     }}
                   >
                     <code
@@ -100,13 +118,13 @@ export default function ApiReference() {
                     >
                       {item.name}
                     </code>
-                    <span style={{ color: "var(--text-secondary)", fontSize: "0.88rem", flex: 1, minWidth: "260px" }}>
+                    <span style={{ color: "var(--text-secondary)", fontSize: "0.88rem", flex: 1, minWidth: "240px" }}>
                       {item.desc}
                     </span>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
 
           {filteredCategories.length === 0 && (

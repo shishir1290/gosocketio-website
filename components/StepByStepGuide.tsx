@@ -13,8 +13,14 @@ export default function StepByStepGuide() {
   return (
     <section id="steps" style={{ padding: "100px 0 80px 0", position: "relative" }}>
       <div className="container">
-        {/* Section Header */}
-        <div style={{ textAlign: "center", marginBottom: "48px" }}>
+        {/* Section Header with Scroll Reveal */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          style={{ textAlign: "center", marginBottom: "48px" }}
+        >
           <div className="badge badge-cyan" style={{ marginBottom: "14px" }}>
             <span>Comprehensive Tutorial</span>
           </div>
@@ -31,18 +37,26 @@ export default function StepByStepGuide() {
           <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem", maxWidth: "680px", margin: "0 auto" }}>
             Follow these step-by-step recipes to build secure, high-throughput, real-time Go backends using gsocketio.
           </p>
-        </div>
+        </motion.div>
 
         {/* Main Grid: Steps List on Left, Active Step Code on Right */}
         <div className="steps-grid">
           {/* Step Selector Navigation */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+          >
             {STEP_BY_STEP_DOCS.map((step, index) => {
               const isSelected = index === activeStepIndex;
               return (
-                <button
+                <motion.button
                   key={step.id}
                   onClick={() => setActiveStepIndex(index)}
+                  whileHover={{ scale: 1.015, x: 3 }}
+                  whileTap={{ scale: 0.985 }}
                   className="glass-panel"
                   style={{
                     display: "flex",
@@ -78,10 +92,10 @@ export default function StepByStepGuide() {
                   </div>
 
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontWeight: 700, fontSize: "0.98rem", color: isSelected ? "#fff" : "var(--text-primary)", marginBottom: "3px" }}>
+                    <div style={{ fontWeight: 700, fontSize: "0.98rem", color: isSelected ? "var(--accent-indigo)" : "var(--text-primary)", marginBottom: "3px" }}>
                       {step.title}
                     </div>
-                    <div style={{ fontSize: "0.82rem", color: isSelected ? "#cbd5e1" : "var(--text-muted)", lineHeight: 1.35 }}>
+                    <div style={{ fontSize: "0.82rem", color: isSelected ? "var(--text-secondary)" : "var(--text-muted)", lineHeight: 1.35 }}>
                       {step.shortDesc}
                     </div>
                   </div>
@@ -94,26 +108,32 @@ export default function StepByStepGuide() {
                       transition: "transform 0.2s ease",
                     }}
                   />
-                </button>
+                </motion.button>
               );
             })}
-          </div>
+          </motion.div>
 
           {/* Active Step Content & Code Viewer */}
-          <div style={{ position: "relative", minWidth: 0 }}>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            style={{ position: "relative", minWidth: 0 }}
+          >
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
                 key={activeStep.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.25 }}
+                initial={{ opacity: 0, y: 12, scale: 0.99 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -12, scale: 0.99 }}
+                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
                 className="glass-panel"
                 style={{
-                  padding: "28px",
-                  background: "rgba(13, 17, 26, 0.92)",
-                  borderColor: "rgba(99, 102, 241, 0.35)",
-                  boxShadow: "0 12px 40px rgba(0, 0, 0, 0.5)",
+                  padding: "clamp(18px, 3vw, 28px)",
+                  background: "var(--bg-card)",
+                  borderColor: "var(--border-active)",
+                  boxShadow: "var(--shadow-sm)",
                 }}
               >
                 {/* Step Header */}
@@ -121,7 +141,7 @@ export default function StepByStepGuide() {
                   <span className="badge badge-cyan" style={{ fontSize: "0.82rem", fontWeight: 700 }}>
                     Step {activeStep.number}
                   </span>
-                  <h3 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#fff" }}>{activeStep.title}</h3>
+                  <h3 style={{ fontSize: "clamp(1.2rem, 2.5vw, 1.4rem)", fontWeight: 800, color: "var(--text-primary)" }}>{activeStep.title}</h3>
                 </div>
 
                 <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: 1.6, marginBottom: "20px" }}>
@@ -168,7 +188,7 @@ export default function StepByStepGuide() {
                 )}
               </motion.div>
             </AnimatePresence>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

@@ -6,8 +6,8 @@ export default function Footer() {
   return (
     <footer
       style={{
-        borderTop: "1px solid rgba(255, 255, 255, 0.08)",
-        background: "rgba(5, 7, 11, 0.95)",
+        borderTop: "1px solid var(--border-subtle)",
+        background: "var(--bg-nav)",
         padding: "60px 0 30px 0",
         position: "relative",
         zIndex: 1,
@@ -19,7 +19,7 @@ export default function Footer() {
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "space-between",
-            alignItems: "center",
+            alignItems: "flex-start",
             gap: "24px",
             marginBottom: "40px",
           }}
@@ -37,7 +37,7 @@ export default function Footer() {
           {/* Links & Social Share */}
           <div style={{ display: "flex", gap: "36px", flexWrap: "wrap" }}>
             <div>
-              <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "#fff", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "12px" }}>
+              <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--text-primary)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "12px" }}>
                 Documentation
               </div>
               <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "8px", fontSize: "0.88rem" }}>
@@ -50,7 +50,7 @@ export default function Footer() {
             </div>
 
             <div>
-              <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "#fff", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "12px" }}>
+              <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--text-primary)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "12px" }}>
                 Community
               </div>
               <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "8px", fontSize: "0.88rem" }}>
@@ -68,7 +68,7 @@ export default function Footer() {
             </div>
 
             <div>
-              <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "#fff", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "12px" }}>
+              <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--text-primary)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "12px" }}>
                 Share & Reach
               </div>
               <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "8px", fontSize: "0.88rem" }}>
@@ -111,7 +111,7 @@ export default function Footer() {
         <div
           style={{
             paddingTop: "24px",
-            borderTop: "1px solid rgba(255, 255, 255, 0.05)",
+            borderTop: "1px solid var(--border-subtle)",
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "space-between",
@@ -125,7 +125,7 @@ export default function Footer() {
             MIT Licensed • Built with Go, Next.js, GSAP & Framer Motion
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            Crafted with <Heart size={13} color="#ec4899" fill="currentColor" /> by <strong style={{ color: "#fff" }}>Md. Sadmanur Islam Shishir</strong>
+            Crafted with <Heart size={13} color="#ec4899" fill="currentColor" /> by <strong style={{ color: "var(--text-primary)" }}>Md. Sadmanur Islam Shishir</strong>
           </div>
         </div>
       </div>

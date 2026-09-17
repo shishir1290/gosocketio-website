@@ -48,6 +48,7 @@ export default function ParticleBackground() {
 
     const render = () => {
       ctx.clearRect(0, 0, width, height);
+      const isLight = document.documentElement.getAttribute("data-theme") === "light";
 
       // Draw connections
       for (let i = 0; i < particles.length; i++) {
@@ -58,7 +59,9 @@ export default function ParticleBackground() {
 
           if (dist < 140) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(99, 102, 241, ${0.15 * (1 - dist / 140)})`;
+            ctx.strokeStyle = isLight
+              ? `rgba(79, 70, 229, ${0.12 * (1 - dist / 140)})`
+              : `rgba(99, 102, 241, ${0.15 * (1 - dist / 140)})`;
             ctx.lineWidth = 0.8;
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);

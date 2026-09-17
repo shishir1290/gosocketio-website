@@ -30,10 +30,16 @@ export default function CrossPlatformClients() {
   const activePlatform = CLIENT_PLATFORMS.find((p) => p.id === activePlatformId) || CLIENT_PLATFORMS[0];
 
   return (
-    <section id="clients" style={{ padding: "90px 0", background: "rgba(10, 14, 22, 0.5)", position: "relative" }}>
+    <section id="clients" style={{ padding: "90px 0", position: "relative" }}>
       <div className="container">
-        {/* Section Header */}
-        <div style={{ textAlign: "center", marginBottom: "40px" }}>
+        {/* Section Header with Scroll Trigger */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          style={{ textAlign: "center", marginBottom: "40px" }}
+        >
           <div className="badge badge-emerald" style={{ marginBottom: "14px" }}>
             <Globe size={13} />
             <span>Universal Compatibility</span>
@@ -51,10 +57,14 @@ export default function CrossPlatformClients() {
           <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem", maxWidth: "700px", margin: "0 auto" }}>
             gsocketio implements the standard Socket.IO v4 protocol. Seamlessly interface with web, mobile, desktop, AI services, and game engines.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Tab Pills */}
-        <div
+        {/* Tab Pills with Hover & Spring Physics */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, delay: 0.1 }}
           style={{
             display: "flex",
             flexWrap: "wrap",
@@ -66,9 +76,11 @@ export default function CrossPlatformClients() {
           {CLIENT_PLATFORMS.map((platform) => {
             const isSelected = platform.id === activePlatformId;
             return (
-              <button
+              <motion.button
                 key={platform.id}
                 onClick={() => setActivePlatformId(platform.id)}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -79,11 +91,11 @@ export default function CrossPlatformClients() {
                   fontWeight: 600,
                   cursor: "pointer",
                   background: isSelected
-                    ? "linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(99, 102, 241, 0.25) 100%)"
-                    : "rgba(255, 255, 255, 0.04)",
-                  color: isSelected ? "#fff" : "var(--text-secondary)",
-                  border: `1px solid ${isSelected ? "rgba(16, 185, 129, 0.5)" : "var(--border-subtle)"}`,
-                  boxShadow: isSelected ? "0 0 20px rgba(16, 185, 129, 0.2)" : "none",
+                    ? "linear-gradient(135deg, rgba(16, 185, 129, 0.18) 0%, rgba(99, 102, 241, 0.22) 100%)"
+                    : "var(--bg-card)",
+                  color: isSelected ? "var(--text-primary)" : "var(--text-secondary)",
+                  border: `1px solid ${isSelected ? "var(--accent-emerald)" : "var(--border-subtle)"}`,
+                  boxShadow: isSelected ? "var(--shadow-glow)" : "var(--shadow-sm)",
                   transition: "all 0.2s ease",
                 }}
               >
@@ -91,10 +103,10 @@ export default function CrossPlatformClients() {
                   {getPlatformLucideIcon(platform.id, 16)}
                 </span>
                 <span>{platform.name}</span>
-              </button>
+              </motion.button>
             );
           })}
-        </div>
+        </motion.div>
 
         {/* Tab Content */}
         <AnimatePresence mode="wait">
@@ -106,11 +118,12 @@ export default function CrossPlatformClients() {
             transition={{ duration: 0.25 }}
             className="glass-panel"
             style={{
-              padding: "28px",
-              background: "rgba(13, 17, 26, 0.92)",
-              border: "1px solid rgba(255, 255, 255, 0.1)",
+              padding: "clamp(18px, 3vw, 28px)",
+              background: "var(--bg-card)",
+              border: "1px solid var(--border-subtle)",
               maxWidth: "1020px",
               margin: "0 auto",
+              boxShadow: "var(--shadow-sm)",
             }}
           >
             {/* Header with Install Command */}
@@ -123,11 +136,11 @@ export default function CrossPlatformClients() {
                 gap: "14px",
                 marginBottom: "20px",
                 paddingBottom: "18px",
-                borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+                borderBottom: "1px solid var(--border-subtle)",
               }}
             >
               <div>
-                <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "#fff", marginBottom: "4px", display: "flex", alignItems: "center", gap: "8px" }}>
+                <h3 style={{ fontSize: "1.25rem", fontWeight: 700, color: "var(--text-primary)", marginBottom: "4px", display: "flex", alignItems: "center", gap: "8px" }}>
                   <span style={{ color: "var(--accent-emerald)" }}>{getPlatformLucideIcon(activePlatform.id, 20)}</span>
                   <span>{activePlatform.name} Integration</span>
                 </h3>
@@ -140,12 +153,13 @@ export default function CrossPlatformClients() {
                   alignItems: "center",
                   gap: "8px",
                   padding: "8px 14px",
-                  background: "rgba(0, 0, 0, 0.4)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
+                  background: "var(--bg-input)",
+                  border: "1px solid var(--border-subtle)",
                   borderRadius: "var(--radius-sm)",
                   fontSize: "0.82rem",
                   fontFamily: "var(--font-mono)",
-                  color: "#94a3b8",
+                  color: "var(--text-primary)",
+                  boxShadow: "var(--shadow-sm)",
                 }}
               >
                 <Terminal size={14} color="var(--accent-emerald)" />

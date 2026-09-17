@@ -149,7 +149,7 @@ export default function Logo({
               fontWeight: 800,
               fontSize: size > 32 ? "1.25rem" : "1.1rem",
               letterSpacing: "-0.025em",
-              color: "#ffffff",
+              color: "var(--text-primary)",
               lineHeight: 1,
             }}
           >

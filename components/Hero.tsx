@@ -130,36 +130,50 @@ export default function Hero() {
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: "14px",
-              padding: "10px 18px",
-              background: "rgba(13, 17, 26, 0.9)",
-              border: "1px solid rgba(0, 242, 254, 0.3)",
+              gap: "12px",
+              padding: "8px 16px",
+              background: "var(--bg-glass)",
+              border: "1px solid var(--border-active)",
               borderRadius: "var(--radius-full)",
               cursor: "pointer",
-              boxShadow: "0 0 25px rgba(0, 242, 254, 0.15)",
+              boxShadow: "var(--shadow-cyan-glow)",
               transition: "all 0.25s ease",
+              maxWidth: "100%",
+              overflow: "hidden",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--accent-cyan)")}
-            onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(0, 242, 254, 0.3)")}
+            onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--border-active)")}
           >
             <span style={{ color: "var(--accent-cyan)", fontFamily: "var(--font-mono)", fontSize: "0.95rem" }}>$</span>
-            <code style={{ color: "#e2e8f0", fontSize: "0.92rem" }}>go get github.com/shishir1290/gsocketio@latest</code>
-            <button
+            <code
               style={{
-                background: copied ? "rgba(16, 185, 129, 0.2)" : "rgba(255, 255, 255, 0.08)",
+                color: "var(--text-primary)",
+                fontSize: "clamp(0.78rem, 2.5vw, 0.92rem)",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              go get github.com/shishir1290/gsocketio@latest
+            </code>
+            <button
+              type="button"
+              style={{
+                background: copied ? "rgba(16, 185, 129, 0.2)" : "rgba(99, 102, 241, 0.15)",
                 border: "none",
                 borderRadius: "var(--radius-full)",
-                color: copied ? "#6ee7b7" : "var(--text-secondary)",
+                color: copied ? "var(--accent-emerald)" : "var(--text-primary)",
                 padding: "6px 12px",
                 fontSize: "0.78rem",
                 display: "flex",
                 alignItems: "center",
                 gap: "5px",
                 cursor: "pointer",
+                flexShrink: 0,
               }}
             >
               {copied ? <Check size={13} /> : <Copy size={13} />}
-              {copied ? "Copied" : "Copy"}
+              <span>{copied ? "Copied" : "Copy"}</span>
             </button>
           </div>
 
@@ -272,8 +286,8 @@ export default function Hero() {
             className="glass-panel hero-stats-card"
             style={{
               padding: "24px",
-              background: "linear-gradient(135deg, rgba(13, 17, 26, 0.9) 0%, rgba(20, 27, 44, 0.9) 100%)",
-              border: "1px solid rgba(99, 102, 241, 0.3)",
+              background: "var(--bg-card)",
+              border: "1px solid var(--border-active)",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
@@ -293,11 +307,11 @@ export default function Hero() {
               </div>
               <span style={{ fontSize: "0.78rem", color: "var(--accent-emerald)", fontWeight: 600 }}>● Live Telemetry</span>
             </div>
-            <div style={{ fontSize: "1.5rem", fontWeight: 800, color: "#fff", marginBottom: "2px" }}>
+            <div style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--text-primary)", marginBottom: "2px" }}>
               {packetsCount.toLocaleString()} <span style={{ fontSize: "0.85rem", color: "var(--text-secondary)" }}>pkts/s</span>
             </div>
             <p style={{ color: "var(--text-secondary)", fontSize: "0.82rem" }}>
-              Active Sessions: <strong style={{ color: "#fff" }}>{activeClients}</strong> • Latency: &lt; 0.2ms
+              Active Sessions: <strong style={{ color: "var(--text-primary)" }}>{activeClients}</strong> • Latency: &lt; 0.2ms
             </p>
           </div>
         </div>
