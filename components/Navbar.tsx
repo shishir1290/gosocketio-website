@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BookOpen, Terminal, Layers, Play, Github, Star, Menu, X, Code2, ExternalLink } from "lucide-react";
+import { BookOpen, Terminal, Layers, Play, Github, Star, Menu, X, Code2, ExternalLink, GitBranch } from "lucide-react";
 import Logo from "@/components/Logo";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -34,6 +34,7 @@ export default function Navbar() {
   const navLinks = [
     { href: "#steps", label: "Guide", icon: BookOpen, aria: "Implementation Guide Tutorial" },
     { href: "#clients", label: "Multi-Client", icon: Layers, aria: "Cross Platform Client SDKs" },
+    { href: "#architecture", label: "Architecture", icon: GitBranch, aria: "gsocketio Architecture & Flow Graph" },
     { href: "#protocol", label: "Protocol", icon: Terminal, aria: "Engine.IO Wire Protocol Specification" },
     { href: "#playground", label: "Simulator", icon: Play, aria: "Interactive Live WebSocket Simulator" },
     { href: "#api", label: "API Reference", icon: Code2, aria: "Browse Go API Reference" },
