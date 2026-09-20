@@ -19,12 +19,17 @@ import {
   Binary,
   Network,
   Radio,
+  Lock,
+  Layers,
+  ShieldCheck,
+  Database,
 } from "lucide-react";
 
 export default function ArchitectureFlowGraph() {
-  const [activeTab, setActiveTab] = useState<"architecture" | "upgrade" | "broadcast" | "framing">("architecture");
+  const [activeTab, setActiveTab] = useState<"architecture" | "upgrade" | "broadcast" | "framing" | "datastructures">("architecture");
   const [selectedNode, setSelectedNode] = useState<string>("engineio");
   const [upgradeStep, setUpgradeStep] = useState<number>(0);
+  const [selectedStruct, setSelectedStruct] = useState<string>("server");
 
   // Pure Go gsocketio Architecture Nodes Details
   const nodeDetails: Record<
@@ -292,6 +297,95 @@ func main() {
     },
   };
 
+  // Pure Go Internal Structs Breakdown
+  const structDetails: Record<
+    string,
+    { name: string; purpose: string; file: string; memoryModel: string; code: string; fields: { name: string; type: string; desc: string }[] }
+  > = {
+    server: {
+      name: "type Server struct",
+      purpose: "Master Server struct implementing http.Handler and coordinating transports, namespaces, and sessions.",
+      file: "server.go",
+      memoryModel: "Root heap object, long-lived across entire application lifecycle. Safe for concurrent access across thousands of goroutines.",
+      code: `type Server struct {
+    opts       *Options
+    sessions   sync.Map          // map[string]*Session (Fast lock-free reads)
+    namespaces sync.Map          // map[string]*Namespace
+    onConn     func(Conn) error
+    onDisconn  func(Conn, string)
+    closed     atomic.Bool
+}`,
+      fields: [
+        { name: "opts", type: "*Options", desc: "Configuration for PingInterval, PingTimeout, MaxPayload, and CORS" },
+        { name: "sessions", type: "sync.Map", desc: "Lock-free concurrent lookup map from SID -> *Session" },
+        { name: "namespaces", type: "sync.Map", desc: "Thread-safe registry of active namespaces ('/', '/chat')" },
+        { name: "closed", type: "atomic.Bool", desc: "Atomic flag to prevent acceptance of new connections on shutdown" },
+      ],
+    },
+    namespace: {
+      name: "type Namespace struct",
+      purpose: "Thread-safe multiplexer for rooms, event handlers, and active socket connections within a specific path.",
+      file: "namespace.go",
+      memoryModel: "Protected by sync.RWMutex. Read-locks for message broadcasting; write-locks only for room join/leave.",
+      code: `type Namespace struct {
+    name       string
+    mu         sync.RWMutex
+    rooms      map[string]map[string]Conn // roomName -> socketID -> Conn
+    sockets    map[string]Conn            // socketID -> Conn
+    handlers   map[string]EventHandler    // eventName -> Callback
+    onConnect  func(Conn) error
+    onDisconn  func(Conn, string)
+}`,
+      fields: [
+        { name: "name", type: "string", desc: "Namespace path identifier (e.g., '/' or '/chat')" },
+        { name: "rooms", type: "map[string]map[string]Conn", desc: "Dual-indexed hash table for O(1) membership and broadcasting" },
+        { name: "sockets", type: "map[string]Conn", desc: "All connected sockets subscribed to this namespace" },
+        { name: "handlers", type: "map[string]EventHandler", desc: "Registered event callback dispatch table" },
+      ],
+    },
+    session: {
+      name: "type Session struct",
+      purpose: "Engine.IO session maintaining connection state, heartbeat ticker, and underlying transport channel.",
+      file: "session.go",
+      memoryModel: "One instance per client connection. Goroutine-safe with internal mutex and ticker lifecycle.",
+      code: `type Session struct {
+    sid         string
+    transport   Transport       // *WebSocketTransport or *PollingTransport
+    lastActive  atomic.Int64    // Unix timestamp of last ping received
+    pingTicker  *time.Ticker    // Heartbeat ticker (default: 25s)
+    pingTimeout time.Duration   // Timeout duration (default: 20s)
+    closeOnce   sync.Once
+    mu          sync.Mutex
+}`,
+      fields: [
+        { name: "sid", type: "string", desc: "128-bit cryptographically secure session ID" },
+        { name: "transport", type: "Transport", desc: "Active transport implementation interface" },
+        { name: "lastActive", type: "atomic.Int64", desc: "Lock-free timestamp for ultra fast heartbeat validation" },
+        { name: "closeOnce", type: "sync.Once", desc: "Guarantees close logic and resource release execute exactly once" },
+      ],
+    },
+    frameHeader: {
+      name: "type FrameHeader struct",
+      purpose: "RFC 6455 frame header representation decoded bitwise from raw byte streams.",
+      file: "websocket.go",
+      memoryModel: "Stack-allocated struct, 0 heap allocations during frame decode loop.",
+      code: `type FrameHeader struct {
+    FIN     bool    // 1 bit: True if final fragment
+    RSV     byte    // 3 bits: Reserved flags
+    Opcode  byte    // 4 bits: 0x1 text, 0x2 binary, 0x8 close, 0x9 ping, 0xA pong
+    Masked  bool    // 1 bit: True if payload masked by client
+    Length  uint64  // 7-bit, 16-bit or 64-bit payload length
+    MaskKey [4]byte // 4-byte XOR unmasking key
+}`,
+      fields: [
+        { name: "FIN", type: "bool", desc: "Indicates if this is the final fragment in a message" },
+        { name: "Opcode", type: "byte", desc: "0x1 (Text), 0x2 (Binary), 0x8 (Close), 0x9 (Ping), 0xA (Pong)" },
+        { name: "MaskKey", type: "[4]byte", desc: "Masking key used to XOR decode client frame payloads" },
+        { name: "Length", type: "uint64", desc: "Decoded payload length across 7, 16, or 64-bit limits" },
+      ],
+    },
+  };
+
   // Pure Go Upgrade Steps
   const upgradeSteps = [
     {
@@ -370,6 +464,7 @@ func main() {
           <div className="inline-flex p-1.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-subtle)] backdrop-blur-xl shadow-lg gap-1 max-w-full overflow-x-auto">
             {[
               { id: "architecture", label: "Go Subsystem Architecture", icon: Boxes },
+              { id: "datastructures", label: "Core Structs & Memory Model", icon: Database },
               { id: "upgrade", label: "Transport Upgrade Machine", icon: Repeat },
               { id: "broadcast", label: "Room Fan-Out & Concurrency", icon: Share2 },
               { id: "framing", label: "RFC 6455 Byte Framing", icon: Binary },
@@ -636,7 +731,115 @@ func main() {
           </motion.div>
         )}
 
-        {/* TAB 2: TRANSPORT UPGRADE MACHINE */}
+        {/* TAB 2: CORE STRUCTS & MEMORY MODEL */}
+        {activeTab === "datastructures" && (
+          <motion.div
+            key="datastructures"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-6"
+          >
+            {/* Struct Selectors (Left 4 Cols) */}
+            <div className="lg:col-span-4 space-y-3">
+              {[
+                { id: "server", title: "type Server", tag: "server.go", desc: "Master server struct & sync.Map registry" },
+                { id: "namespace", title: "type Namespace", tag: "namespace.go", desc: "sync.RWMutex room index & handlers" },
+                { id: "session", title: "type Session", tag: "session.go", desc: "Engine.IO session & heartbeat ticker" },
+                { id: "frameHeader", title: "type FrameHeader", tag: "websocket.go", desc: "RFC 6455 0-alloc bitwise header" },
+              ].map((s) => {
+                const isSelected = selectedStruct === s.id;
+                return (
+                  <div
+                    key={s.id}
+                    onClick={() => setSelectedStruct(s.id)}
+                    className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                      isSelected
+                        ? "bg-cyan-500/15 border-cyan-500 shadow-md shadow-cyan-500/10"
+                        : "bg-[var(--bg-card)] border-[var(--border-subtle)] hover:border-[var(--border-active)]"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-mono text-xs font-bold text-[var(--text-primary)]">{s.title}</span>
+                      <span className="badge badge-cyan text-[0.65rem] py-0 px-2">{s.tag}</span>
+                    </div>
+                    <div className="text-[0.75rem] text-[var(--text-secondary)]">{s.desc}</div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Struct Details & Memory Layout (Right 8 Cols) */}
+            <div className="lg:col-span-8">
+              <div className="glass-panel p-6 sm:p-7 bg-[var(--bg-card)] border border-[var(--border-subtle)] rounded-2xl shadow-xl">
+                <div className="flex items-center justify-between pb-4 mb-4 border-b border-[var(--border-subtle)]">
+                  <div>
+                    <h3 className="text-lg font-mono font-bold text-[var(--accent-cyan)]">
+                      {structDetails[selectedStruct].name}
+                    </h3>
+                    <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+                      File: <span className="font-mono text-sky-400">{structDetails[selectedStruct].file}</span>
+                    </p>
+                  </div>
+                  <span className="badge badge-emerald text-xs">Standard Go Model</span>
+                </div>
+
+                <p className="text-xs sm:text-sm text-[var(--text-secondary)] mb-4">
+                  {structDetails[selectedStruct].purpose}
+                </p>
+
+                {/* Memory & Concurrency Model Alert */}
+                <div className="p-3.5 bg-indigo-500/10 border border-indigo-500/30 rounded-xl mb-5 flex items-start gap-2.5">
+                  <ShieldCheck size={18} className="text-indigo-400 shrink-0 mt-0.5" />
+                  <div className="text-xs text-[var(--text-secondary)]">
+                    <strong className="text-[var(--text-primary)]">Concurrency & Memory Model:</strong>{" "}
+                    {structDetails[selectedStruct].memoryModel}
+                  </div>
+                </div>
+
+                {/* Field Breakdown Table */}
+                <div className="mb-5 overflow-x-auto">
+                  <div className="text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-2.5">
+                    Field Definitions & Memory Role
+                  </div>
+                  <table className="w-full text-xs text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-white/10 text-[var(--text-muted)] font-mono">
+                        <th className="py-2 pr-3">Field</th>
+                        <th className="py-2 pr-3">Go Type</th>
+                        <th className="py-2">Role & Safety</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-white/5 font-mono">
+                      {structDetails[selectedStruct].fields.map((f, idx) => (
+                        <tr key={idx} className="hover:bg-white/[0.02]">
+                          <td className="py-2 pr-3 text-cyan-300 font-bold">{f.name}</td>
+                          <td className="py-2 pr-3 text-purple-300">{f.type}</td>
+                          <td className="py-2 text-[var(--text-secondary)] font-sans">{f.desc}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Go Definition Code */}
+                <div>
+                  <div className="text-xs font-semibold text-[var(--text-primary)] uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    <FileCode2 size={13} className="text-[var(--accent-cyan)]" />
+                    <span>Go Source Definition</span>
+                  </div>
+                  <div className="bg-[#080c14] border border-cyan-400/20 rounded-xl p-3.5 font-mono text-[0.75rem] text-sky-300 overflow-x-auto">
+                    <pre>
+                      <code>{structDetails[selectedStruct].code}</code>
+                    </pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* TAB 3: TRANSPORT UPGRADE MACHINE */}
         {activeTab === "upgrade" && (
           <motion.div
             key="upgrade"
@@ -696,7 +899,7 @@ func main() {
           </motion.div>
         )}
 
-        {/* TAB 3: ROOM FAN-OUT & CONCURRENCY */}
+        {/* TAB 4: ROOM FAN-OUT & CONCURRENCY */}
         {activeTab === "broadcast" && (
           <motion.div
             key="broadcast"
@@ -716,10 +919,10 @@ func main() {
             </div>
 
             {/* Diagram */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center p-6 bg-[var(--bg-input)] rounded-2xl border border-[var(--border-subtle)] mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch p-6 bg-[var(--bg-input)] rounded-2xl border border-[var(--border-subtle)] mb-6">
               {/* Event Ingestion */}
-              <div className="p-4 bg-indigo-500/10 border border-indigo-500/30 rounded-xl text-center">
-                <Terminal size={24} className="mx-auto text-indigo-400 mb-2" />
+              <div className="p-4 bg-indigo-500/10 border border-indigo-500/30 rounded-xl text-center min-h-[150px] flex flex-col justify-center items-center">
+                <Terminal size={24} className="text-indigo-400 mb-2" />
                 <div className="font-bold text-xs text-[var(--text-primary)]">Inbound Event Ingestion</div>
                 <div className="text-[0.7rem] text-[var(--text-muted)] font-mono mt-1">
                   OnEvent(&quot;chat&quot;, args)
@@ -727,28 +930,29 @@ func main() {
               </div>
 
               {/* Server Fan-out Engine */}
-              <div className="p-4 bg-cyan-500/10 border border-cyan-500/40 rounded-xl text-center relative">
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 badge badge-cyan text-[0.65rem] py-0.5 px-2">
-                  sync.RWMutex RLock
+              <div className="p-4 bg-cyan-500/10 border border-cyan-500/40 rounded-xl text-center min-h-[150px] flex flex-col justify-center items-center">
+                <div className="inline-flex items-center justify-center gap-1.5 badge badge-cyan text-[0.68rem] py-0.5 px-2.5 mb-2 whitespace-nowrap">
+                  <Lock size={11} />
+                  <span>sync.RWMutex RLock</span>
                 </div>
-                <Server size={24} className="mx-auto text-cyan-400 mb-2 mt-1" />
+                <Server size={22} className="text-cyan-400 mb-1.5" />
                 <div className="font-bold text-xs text-[var(--text-primary)]">gsocketio Namespace Hub</div>
-                <div className="text-[0.7rem] text-sky-400 font-mono mt-1">
+                <div className="text-[0.7rem] text-sky-400 font-mono mt-0.5">
                   srv.ToRoom(&quot;general&quot;, ...)
                 </div>
               </div>
 
               {/* Goroutine Fan-out */}
-              <div className="space-y-2">
-                <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/30 rounded-lg flex items-center justify-between text-xs">
+              <div className="space-y-2 min-h-[150px] flex flex-col justify-center">
+                <div className="p-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg flex items-center justify-between text-xs">
                   <span className="font-semibold text-[var(--text-primary)]">Goroutine 1 → Conn B</span>
                   <span className="text-[0.7rem] text-emerald-400 font-mono">WS Write ✓</span>
                 </div>
-                <div className="p-2.5 bg-emerald-500/10 border border-emerald-500/30 rounded-lg flex items-center justify-between text-xs">
+                <div className="p-2 bg-emerald-500/10 border border-emerald-500/30 rounded-lg flex items-center justify-between text-xs">
                   <span className="font-semibold text-[var(--text-primary)]">Goroutine 2 → Conn C</span>
                   <span className="text-[0.7rem] text-emerald-400 font-mono">WS Write ✓</span>
                 </div>
-                <div className="p-2.5 bg-white/5 border border-[var(--border-subtle)] rounded-lg flex items-center justify-between text-xs opacity-50">
+                <div className="p-2 bg-white/5 border border-[var(--border-subtle)] rounded-lg flex items-center justify-between text-xs opacity-60">
                   <span className="text-[var(--text-muted)]">Sender Socket</span>
                   <span className="text-[0.7rem] text-amber-400 font-mono">Skip Filter ✕</span>
                 </div>
@@ -782,7 +986,7 @@ func (ns *Namespace) ToRoom(room, event string, sender sio.Conn, data any) {
           </motion.div>
         )}
 
-        {/* TAB 4: RFC 6455 BYTE FRAMING */}
+        {/* TAB 5: RFC 6455 BYTE FRAMING */}
         {activeTab === "framing" && (
           <motion.div
             key="framing"
@@ -835,11 +1039,11 @@ func (ns *Namespace) ToRoom(room, event string, sender sio.Conn, data any) {
                 </div>
                 <div className="p-3 bg-[#080c14] rounded-lg border border-indigo-500/30 font-mono text-xs text-[var(--text-primary)] space-y-1">
                   <div>
-                    <span className="text-amber-400">4</span>
-                    <span className="text-purple-400">2</span>
+                    <span className="text-amber-400 font-bold">4</span>
+                    <span className="text-purple-400 font-bold">2</span>
                     <span className="text-cyan-400">/chat,</span>
                     <span className="text-emerald-400">12</span>
-                    <span className="text-sky-300">[&quot;send_msg&quot;, {`{"text":"Hello Go!"}`}]</span>
+                    <span className="text-sky-300">{`["send_msg", {"text":"Hello Go!"}]`}</span>
                   </div>
                   <div className="text-[0.7rem] text-[var(--text-muted)] pt-2 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-2">
                     <div><span className="text-amber-400 font-bold">4</span> : Engine.IO Msg</div>
