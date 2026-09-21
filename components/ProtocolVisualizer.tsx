@@ -11,14 +11,46 @@ import { ProtocolWireTerminal } from "./protocol/ProtocolWireTerminal";
 
 export default function ProtocolVisualizer() {
   const [activeStep, setActiveStep] = useState(0);
+  const [wheelRotation, setWheelRotation] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [copied, setCopied] = useState(false);
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null);
 
+  const stepAngle = 360 / PROTOCOL_STEPS.length;
+
+  const goToStep = (targetIndex: number) => {
+    setActiveStep((currentStep) => {
+      if (currentStep === targetIndex) return currentStep;
+      const total = PROTOCOL_STEPS.length;
+      let diff = ((targetIndex - currentStep) % total + total) % total;
+      if (diff > total / 2) {
+        diff -= total;
+      }
+      setWheelRotation((prevRotation) => prevRotation - diff * stepAngle);
+      return targetIndex;
+    });
+  };
+
+  const nextStep = () => {
+    setActiveStep((currentStep) => {
+      const next = (currentStep + 1) % PROTOCOL_STEPS.length;
+      setWheelRotation((prev) => prev - stepAngle);
+      return next;
+    });
+  };
+
+  const prevStep = () => {
+    setActiveStep((currentStep) => {
+      const prev = (currentStep - 1 + PROTOCOL_STEPS.length) % PROTOCOL_STEPS.length;
+      setWheelRotation((rot) => rot + stepAngle);
+      return prev;
+    });
+  };
+
   useEffect(() => {
     if (isPlaying) {
       autoPlayRef.current = setInterval(() => {
-        setActiveStep((prev) => (prev + 1) % PROTOCOL_STEPS.length);
+        nextStep();
       }, 3500);
     } else {
       if (autoPlayRef.current) clearInterval(autoPlayRef.current);
@@ -26,7 +58,7 @@ export default function ProtocolVisualizer() {
     return () => {
       if (autoPlayRef.current) clearInterval(autoPlayRef.current);
     };
-  }, [isPlaying]);
+  }, [isPlaying, stepAngle]);
 
   const handleCopy = async () => {
     await copyToClipboard(PROTOCOL_STEPS[activeStep].wire);
@@ -34,17 +66,7 @@ export default function ProtocolVisualizer() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const nextStep = () => {
-    setActiveStep((prev) => (prev + 1) % PROTOCOL_STEPS.length);
-  };
-
-  const prevStep = () => {
-    setActiveStep((prev) => (prev - 1 + PROTOCOL_STEPS.length) % PROTOCOL_STEPS.length);
-  };
-
   const currentStep = PROTOCOL_STEPS[activeStep];
-  const stepAngle = 360 / PROTOCOL_STEPS.length;
-  const wheelRotation = -activeStep * stepAngle;
 
   return (
     <section id="protocol" className="pt-4 md:pt-6 pb-14 md:pb-20 relative overflow-hidden">
@@ -112,7 +134,7 @@ export default function ProtocolVisualizer() {
             <ProtocolOrbitWheel
               steps={PROTOCOL_STEPS}
               activeStep={activeStep}
-              onSelectStep={setActiveStep}
+              onSelectStep={goToStep}
               wheelRotation={wheelRotation}
               stepAngle={stepAngle}
             />
@@ -131,7 +153,7 @@ export default function ProtocolVisualizer() {
             currentStep={currentStep}
             copied={copied}
             onCopy={handleCopy}
-            onSelectStep={setActiveStep}
+            onSelectStep={goToStep}
           />
         </div>
       </div>
