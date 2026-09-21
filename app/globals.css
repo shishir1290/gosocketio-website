@@ -88,13 +88,13 @@ html, body {
   color: var(--text-primary);
   font-family: var(--font-sans);
   scroll-behavior: smooth;
-  scroll-padding-top: 90px;
+  scroll-padding-top: 68px;
   -webkit-font-smoothing: antialiased;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 section[id] {
-  scroll-margin-top: 90px;
+  scroll-margin-top: 68px;
 }
 
 /* Custom Scrollbar */

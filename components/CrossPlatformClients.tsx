@@ -30,7 +30,7 @@ export default function CrossPlatformClients() {
   const activePlatform = CLIENT_PLATFORMS.find((p) => p.id === activePlatformId) || CLIENT_PLATFORMS[0];
 
   return (
-    <section id="clients" className="py-20 md:py-24 relative">
+    <section id="clients" className="pt-4 md:pt-6 pb-14 md:pb-20 relative">
       <div className="container">
         {/* Section Header with Scroll Trigger */}
         <motion.div

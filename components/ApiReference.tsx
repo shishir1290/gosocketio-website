@@ -18,7 +18,7 @@ export default function ApiReference() {
   })).filter((cat) => cat.items.length > 0);
 
   return (
-    <section id="api" className="py-20 md:py-24 relative">
+    <section id="api" className="pt-4 md:pt-6 pb-14 md:pb-20 relative">
       <div className="container">
         {/* Header with Scroll Reveal */}
         <motion.div

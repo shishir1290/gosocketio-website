@@ -37,5 +37,10 @@ npm run build
 npm run start
 \`\`\`
 
+## Author
+- **Md. Sadmanur Islam Shishir**
+  - Portfolio: [shishir.click](https://shishir.click) (Mirror: [shishir1290.netlify.app](https://shishir1290.netlify.app))
+  - GitHub: [@shishir1290](https://github.com/shishir1290)
+
 ## License
 MIT

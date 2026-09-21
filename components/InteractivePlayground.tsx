@@ -122,7 +122,7 @@ export default function InteractivePlayground() {
   };
 
   return (
-    <section id="playground" className="py-20 md:py-24 relative">
+    <section id="playground" className="pt-4 md:pt-6 pb-14 md:pb-20 relative">
       <div className="container">
         {/* Section Header with Scroll Reveal */}
         <motion.div

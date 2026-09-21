@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Github, Heart, ExternalLink, Share2 } from "lucide-react";
+import { Github, Heart, ExternalLink, Share2, Globe } from "lucide-react";
 import Logo from "@/components/Logo";
+import PortfolioLink from "@/components/PortfolioLink";
 
 export default function Footer() {
   return (
@@ -77,6 +78,11 @@ export default function Footer() {
                     <ExternalLink size={14} /> pkg.go.dev Package Docs
                   </a>
                 </li>
+                <li>
+                  <PortfolioLink className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] no-underline inline-flex items-center gap-1.5 transition-colors">
+                    <Globe size={14} className="text-[var(--accent-cyan)]" /> Developer Portfolio
+                  </PortfolioLink>
+                </li>
               </ul>
             </div>
 
@@ -126,7 +132,10 @@ export default function Footer() {
             MIT Licensed • Built with Go, Next.js, GSAP & Framer Motion
           </div>
           <div className="flex items-center gap-1">
-            Crafted with <Heart size={13} className="text-pink-500 fill-current" /> by <strong className="text-[var(--text-primary)]">Md. Sadmanur Islam Shishir</strong>
+            Crafted with <Heart size={13} className="text-pink-500 fill-current" /> by{" "}
+            <PortfolioLink className="font-semibold text-[var(--text-primary)] hover:text-[var(--accent-cyan)] transition-colors underline decoration-dotted decoration-[var(--border-active)] hover:decoration-solid">
+              Md. Sadmanur Islam Shishir
+            </PortfolioLink>
           </div>
         </div>
       </div>

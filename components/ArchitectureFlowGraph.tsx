@@ -433,7 +433,7 @@ func main() {
   ];
 
   return (
-    <section id="architecture" className="py-20 md:py-28 relative overflow-hidden">
+    <section id="architecture" className="pt-4 md:pt-6 pb-14 md:pb-20 relative overflow-hidden">
       {/* Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-gradient-to-r from-indigo-500/10 via-cyan-500/10 to-purple-500/10 blur-[120px] pointer-events-none -z-10" />
 

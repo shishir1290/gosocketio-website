@@ -2,8 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Plus_Jakarta_Sans, Fira_Code } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import DocsLayout from "@/components/DocsLayout";
 import ParticleBackground from "@/components/ParticleBackground";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
@@ -39,7 +38,9 @@ export const metadata: Metadata = {
   description:
     "Pure-Go Socket.IO v4 server with zero dependencies. Manage real-time client connections, broadcast string and binary events, and scale high-throughput streams.",
   applicationName: "gsocketio",
-  authors: [{ name: "Md. Sadmanur Islam Shishir", url: "https://github.com/shishir1290" }],
+  authors: [
+    { name: "Md. Sadmanur Islam Shishir", url: "https://shishir.click" },
+  ],
   generator: "Next.js",
   keywords: [
     "gsocketio",
@@ -134,6 +135,8 @@ const jsonLd = {
   sameAs: [
     "https://github.com/shishir1290/gsocketio",
     "https://pkg.go.dev/github.com/shishir1290/gsocketio",
+    "https://shishir.click",
+    "https://shishir1290.netlify.app",
     "https://twitter.com/shishir1290",
     "https://github.com/shishir1290",
   ],
@@ -152,8 +155,10 @@ const jsonLd = {
   author: {
     "@type": "Person",
     name: "Md. Sadmanur Islam Shishir",
-    url: "https://github.com/shishir1290",
+    url: "https://shishir.click",
     sameAs: [
+      "https://shishir.click",
+      "https://shishir1290.netlify.app",
       "https://github.com/shishir1290",
       "https://twitter.com/shishir1290",
     ],
@@ -161,7 +166,7 @@ const jsonLd = {
   publisher: {
     "@type": "Person",
     name: "Md. Sadmanur Islam Shishir",
-    url: "https://github.com/shishir1290",
+    url: "https://shishir.click",
   },
   downloadUrl: "https://pkg.go.dev/github.com/shishir1290/gsocketio",
   softwareVersion: "v1.0.4",
@@ -220,9 +225,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <ParticleBackground />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
+          <DocsLayout>{children}</DocsLayout>
         </ThemeProvider>
       </body>
     </html>

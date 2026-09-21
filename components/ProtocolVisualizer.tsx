@@ -60,7 +60,7 @@ export default function ProtocolVisualizer() {
   ];
 
   return (
-    <section id="protocol" className="py-20 md:py-24 relative">
+    <section id="protocol" className="pt-4 md:pt-6 pb-14 md:pb-20 relative">
       <div className="container">
         {/* Section Header with Scroll Reveal */}
         <motion.div

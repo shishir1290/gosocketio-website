@@ -63,8 +63,9 @@ export default function Hero() {
 
   return (
     <section
+      id="hero"
       ref={containerRef}
-      className="relative pt-[120px] pb-[100px] overflow-visible text-center"
+      className="relative pt-6 md:pt-8 pb-12 md:pb-16 overflow-visible text-center"
     >
       <div className="hero-glow" />
       <div className="grid-overlay" />
