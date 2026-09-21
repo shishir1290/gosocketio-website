@@ -29,16 +29,16 @@ export function ProtocolOrbitWheel({
         className="w-full h-full overflow-visible drop-shadow-[0_0_25px_rgba(0,242,254,0.25)]"
       >
         <defs>
-          <linearGradient id="cyanArcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#00f2fe" stopOpacity="0.3" />
-            <stop offset="60%" stopColor="#38bdf8" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#0284c7" stopOpacity="1" />
+          <linearGradient id="cyanArcGrad" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#00f2fe" stopOpacity="0.25" />
+            <stop offset="50%" stopColor="#00f2fe" stopOpacity="0.75" />
+            <stop offset="100%" stopColor="#38bdf8" stopOpacity="1" />
           </linearGradient>
 
-          <linearGradient id="pinkArcGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#ec4899" stopOpacity="0.3" />
-            <stop offset="60%" stopColor="#f43f5e" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#e11d48" stopOpacity="1" />
+          <linearGradient id="pinkArcGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#ec4899" stopOpacity="0.25" />
+            <stop offset="50%" stopColor="#ec4899" stopOpacity="0.75" />
+            <stop offset="100%" stopColor="#f43f5e" stopOpacity="1" />
           </linearGradient>
 
           <filter id="glowGlow" x="-20%" y="-20%" width="140%" height="140%">
@@ -58,30 +58,34 @@ export function ProtocolOrbitWheel({
           className="text-[var(--border-subtle)] opacity-40"
         />
 
+        {/* Top cyan/blue arc: flows anti-clockwise from right (3 o'clock) over top to left (9 o'clock) */}
         <path
-          d="M 68 260 A 192 192 0 0 1 452 260"
+          d="M 449 226 A 192 192 0 0 0 68 250"
           fill="none"
           stroke="url(#cyanArcGrad)"
           strokeWidth="8"
           strokeLinecap="round"
           filter="url(#glowGlow)"
         />
+        {/* Cyan arrowhead on left pointing DOWN (anti-clockwise) */}
         <polygon
-          points="435,250 469,250 452,284"
+          points="51,250 85,250 68,284"
           fill="#38bdf8"
           filter="url(#glowGlow)"
         />
 
+        {/* Bottom pink/red arc: flows anti-clockwise from left (9 o'clock) over bottom to right (3 o'clock) */}
         <path
-          d="M 452 260 A 192 192 0 0 1 68 260"
+          d="M 71 294 A 192 192 0 0 0 452 270"
           fill="none"
           stroke="url(#pinkArcGrad)"
           strokeWidth="8"
           strokeLinecap="round"
           filter="url(#glowGlow)"
         />
+        {/* Pink/red arrowhead on right pointing UP (anti-clockwise) */}
         <polygon
-          points="51,270 85,270 68,236"
+          points="435,270 469,270 452,236"
           fill="#f43f5e"
           filter="url(#glowGlow)"
         />
