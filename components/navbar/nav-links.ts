@@ -5,6 +5,7 @@ import {
   Play,
   Code2,
   GitBranch,
+  HelpCircle,
 } from "lucide-react";
 
 export const NAV_LINKS = [
@@ -14,4 +15,5 @@ export const NAV_LINKS = [
   { href: "#protocol", label: "Protocol", icon: Terminal, aria: "Wire Protocol" },
   { href: "#playground", label: "Simulator", icon: Play, aria: "Live Simulator" },
   { href: "#api", label: "API Docs", icon: Code2, aria: "API Reference" },
+  { href: "#faq", label: "FAQ", icon: HelpCircle, aria: "Frequently Asked Questions" },
 ];

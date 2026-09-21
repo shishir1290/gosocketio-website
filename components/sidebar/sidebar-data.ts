@@ -12,6 +12,8 @@ import {
   CheckCircle2,
   ShieldCheck,
   Zap,
+  HelpCircle,
+  Shield,
 } from "lucide-react";
 
 export const NAV_MENU_ITEMS = [
@@ -22,6 +24,12 @@ export const NAV_MENU_ITEMS = [
     label: "Multi-Client SDKs",
     id: "clients",
     icon: Layers,
+  },
+  {
+    href: "#compare",
+    label: "Ecosystem Compare",
+    id: "compare",
+    icon: Shield,
   },
   {
     href: "#architecture",
@@ -42,6 +50,7 @@ export const NAV_MENU_ITEMS = [
     icon: Play,
   },
   { href: "#api", label: "Go API Reference", id: "api", icon: Code2 },
+  { href: "#faq", label: "FAQ & Tech Q&A", id: "faq", icon: HelpCircle },
 ];
 
 export const GUIDE_SUB_ITEMS = [

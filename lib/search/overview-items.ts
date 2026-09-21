@@ -11,6 +11,15 @@ export const OVERVIEW_SEARCH_ITEMS: SearchItem[] = [
     badge: "v1.0.4",
   },
   {
+    id: "overview-compare",
+    title: "Go Socket Ecosystem Benchmark & Comparison",
+    category: "Overview",
+    description: "Compare gsocketio vs Legacy go-socket.io vs Gorilla WebSocket vs net/http across features and latency.",
+    href: "#compare",
+    keywords: ["compare", "comparison", "benchmark", "gorilla", "performance", "latency", "features"],
+    badge: "Benchmark",
+  },
+  {
     id: "overview-architecture",
     title: "Architecture & Flow Graph",
     category: "Overview",
@@ -35,5 +44,14 @@ export const OVERVIEW_SEARCH_ITEMS: SearchItem[] = [
     href: "#playground",
     keywords: ["simulator", "playground", "test", "websocket", "latency", "benchmark", "emit", "broadcast", "packets"],
     badge: "Live Tool",
+  },
+  {
+    id: "overview-faq",
+    title: "Frequently Asked Questions (FAQ)",
+    category: "Overview",
+    description: "Technical answers on Socket.IO v4 client compatibility, zero dependencies, benchmarks, auth, and RFC 6455.",
+    href: "#faq",
+    keywords: ["faq", "questions", "answers", "gorilla", "performance", "jwt", "auth", "binary", "compatibility"],
+    badge: "FAQ",
   },
 ];

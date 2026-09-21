@@ -49,6 +49,11 @@ export default function RootLayout({
         <link rel="shortcut icon" href="/favicon.svg" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon" />
 
+        <meta
+          name="google-site-verification"
+          content="NYlL9qXs5QyajXegI2kz-9f80CV30H0CJddI9tGA87g"
+        />
+
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
 
         <Script

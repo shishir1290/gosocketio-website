@@ -22,10 +22,12 @@ export default function DocsSidebar({ onCloseMobile }: DocsSidebarProps) {
       { id: "hero", navId: "home" },
       { id: "steps", navId: "steps" },
       { id: "clients", navId: "clients" },
+      { id: "compare", navId: "compare" },
       { id: "architecture", navId: "architecture" },
       { id: "protocol", navId: "protocol" },
       { id: "playground", navId: "playground" },
       { id: "api", navId: "api" },
+      { id: "faq", navId: "faq" },
     ];
 
     const handleScroll = () => {
