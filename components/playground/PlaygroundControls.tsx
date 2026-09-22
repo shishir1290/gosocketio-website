@@ -1,6 +1,6 @@
 "use client";
 
-import { Play, Square, Send, Plus } from "lucide-react";
+import { Play, Square, Send, Plus, MessageSquare, Bell, Zap } from "lucide-react";
 
 interface PlaygroundControlsProps {
   connected: boolean;
@@ -110,9 +110,9 @@ export function PlaygroundControls({
                 onEventNameChange("chat");
                 onEventPayloadChange(JSON.stringify({ text: "Hello everyone from live simulation!" }, null, 2));
               }}
-              className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-[var(--accent-cyan)] hover:bg-cyan-500/20 border border-cyan-500/20 cursor-pointer"
+              className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-[var(--accent-cyan)] hover:bg-cyan-500/20 border border-cyan-500/20 cursor-pointer inline-flex items-center gap-1"
             >
-              💬 Chat
+              <MessageSquare size={11} /> Chat
             </button>
             <button
               type="button"
@@ -120,9 +120,9 @@ export function PlaygroundControls({
                 onEventNameChange("broadcast");
                 onEventPayloadChange(JSON.stringify({ alert: "Announcement for all connected clients!" }, null, 2));
               }}
-              className="text-[10px] px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/20 cursor-pointer"
+              className="text-[10px] px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/20 cursor-pointer inline-flex items-center gap-1"
             >
-              📢 Alert
+              <Bell size={11} /> Alert
             </button>
             <button
               type="button"
@@ -130,9 +130,9 @@ export function PlaygroundControls({
                 onEventNameChange("telemetry:ping");
                 onEventPayloadChange("12345");
               }}
-              className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 cursor-pointer"
+              className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 cursor-pointer inline-flex items-center gap-1"
             >
-              ⚡ Ping
+              <Zap size={11} /> Ping
             </button>
           </div>
         </div>

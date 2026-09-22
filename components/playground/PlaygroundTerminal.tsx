@@ -1,7 +1,15 @@
 "use client";
 
 import { RefObject } from "react";
-import { Terminal, Trash2 } from "lucide-react";
+import {
+  Terminal,
+  Trash2,
+  ArrowDownLeft,
+  ArrowUpRight,
+  AlertTriangle,
+  MessageSquare,
+  Zap,
+} from "lucide-react";
 import { LogEntry } from "./types";
 
 interface PlaygroundTerminalProps {
@@ -39,17 +47,24 @@ export function PlaygroundTerminal({
         {logs.map((log) => {
           let badgeColor = "text-slate-400 bg-slate-500/15";
           let prefix = "SYS";
+          let BadgeIcon = Terminal;
 
           if (log.type === "in") {
             badgeColor = "text-emerald-400 bg-emerald-500/15";
             prefix = "RECV";
+            BadgeIcon = ArrowDownLeft;
           } else if (log.type === "out") {
             badgeColor = "text-cyan-400 bg-cyan-400/15";
             prefix = "SEND";
+            BadgeIcon = ArrowUpRight;
           } else if (log.type === "err") {
             badgeColor = "text-red-400 bg-red-500/15";
             prefix = "ERR";
+            BadgeIcon = AlertTriangle;
           }
+
+          const isBroadcast = log.text.includes("[Broadcast from");
+          const isPong = log.text.includes("Pong received");
 
           return (
             <div
@@ -58,14 +73,19 @@ export function PlaygroundTerminal({
             >
               <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                 <span
-                  className={`text-[0.68rem] font-bold py-0.5 px-1.5 rounded ${badgeColor} shrink-0`}
+                  className={`text-[0.68rem] font-bold py-0.5 px-1.5 rounded ${badgeColor} shrink-0 inline-flex items-center gap-1`}
                 >
+                  <BadgeIcon size={10} />
                   {prefix}
                 </span>
                 <span className="text-[var(--text-muted)] text-[0.72rem] shrink-0">
                   {log.time}
                 </span>
-                <span className="text-slate-200 break-all">{log.text}</span>
+                <span className="text-slate-200 break-all inline-flex items-center gap-1.5 flex-wrap">
+                  {isBroadcast && <MessageSquare size={13} className="text-[var(--accent-cyan)] shrink-0" />}
+                  {isPong && <Zap size={13} className="text-emerald-400 shrink-0" />}
+                  <span>{log.text}</span>
+                </span>
               </div>
 
               {log.raw && (

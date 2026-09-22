@@ -135,14 +135,14 @@ export function useSimulator() {
           } else {
             text = String(payload);
           }
-          addLog("in", `💬 [Broadcast from ${sender}]: ${text}`, rawPacket);
+          addLog("in", `[Broadcast from ${sender}]: ${text}`, rawPacket);
         } else if (event === "room_notification") {
           const msg = typeof payload === "object" && payload?.message ? payload.message : JSON.stringify(payload);
-          addLog("sys", `🚪 ${msg}`, rawPacket);
+          addLog("sys", `${msg}`, rawPacket);
         } else if (event === "telemetry:alert") {
-          addLog("err", `⚠️ [ALERT ${payload?.nodeId || ""}]: ${payload?.message || "Incident detected"}`, rawPacket);
+          addLog("err", `[ALERT ${payload?.nodeId || ""}]: ${payload?.message || "Incident detected"}`, rawPacket);
         } else if (event === "telemetry:pong") {
-          addLog("in", `🏓 Pong received: ${payloadStr}`, rawPacket);
+          addLog("in", `Pong received: ${payloadStr}`, rawPacket);
         } else {
           addLog(
             "in",
