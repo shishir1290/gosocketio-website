@@ -25,12 +25,17 @@ export function HeroStatsCards() {
 
       socket.on("connect", () => {
         setIsLive(true);
-        socket.emit("telemetry:subscribe", { client: "gosocketio-website-hero" });
+        socket.emit("telemetry:subscribe", {
+          client: "gosocketio-website-hero",
+        });
       });
 
       socket.on("telemetry:metrics", (metrics: any) => {
         setIsLive(true);
-        if (metrics.packetsPerSecIn !== undefined && metrics.packetsPerSecOut !== undefined) {
+        if (
+          metrics.packetsPerSecIn !== undefined &&
+          metrics.packetsPerSecOut !== undefined
+        ) {
           const rate = metrics.packetsPerSecIn + metrics.packetsPerSecOut;
           setPacketsCount(rate > 0 ? rate : metrics.totalPacketsOut || 450);
         }
@@ -74,7 +79,8 @@ export function HeroStatsCards() {
             100% Go Stdlib
           </h3>
           <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
-            Engine.IO v4 protocol, WebSocket parser & RFC 6455 framing written purely in standard Go.
+            Engine.IO v4 protocol, WebSocket parser & RFC 6455 framing written
+            purely in standard Go.
           </p>
         </div>
       </div>
@@ -94,7 +100,8 @@ export function HeroStatsCards() {
             HTTP Polling → WS
           </h3>
           <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
-            Seamless automatic transport fallback and handshake upgrade with zero packet loss.
+            Seamless automatic transport fallback and handshake upgrade with
+            zero packet loss.
           </p>
         </div>
       </div>
@@ -113,7 +120,8 @@ export function HeroStatsCards() {
             Native Binary Streams
           </h3>
           <p className="text-[var(--text-secondary)] text-sm leading-relaxed">
-            Pass raw []byte byte-buffers directly over WebSocket frames without base64 overhead.
+            Pass raw []byte byte-buffers directly over WebSocket frames without
+            base64 overhead.
           </p>
         </div>
       </div>
@@ -125,15 +133,25 @@ export function HeroStatsCards() {
               <Activity size={22} />
             </div>
             <span className="text-xs font-semibold text-[var(--accent-emerald)] flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full ${isLive ? "bg-emerald-400 animate-pulse shadow-[0_0_8px_#10b981]" : "bg-emerald-500/70"}`} />
+              <span
+                className={`w-2 h-2 rounded-full ${isLive ? "bg-emerald-400 animate-pulse shadow-[0_0_8px_#10b981]" : "bg-emerald-500/70"}`}
+              />
               {isLive ? "Live Stream (Online)" : "● Live Telemetry"}
             </span>
           </div>
           <div className="text-2xl font-extrabold text-[var(--text-primary)] mb-1">
-            {packetsCount.toLocaleString()} <span className="text-sm font-normal text-[var(--text-secondary)]">pkts/s</span>
+            {packetsCount.toLocaleString()}{" "}
+            <span className="text-sm font-normal text-[var(--text-secondary)]">
+              pkts/s
+            </span>
           </div>
           <p className="text-[var(--text-secondary)] text-xs sm:text-sm leading-normal">
-            Active Sessions: <strong className="text-[var(--text-primary)]">{activeClients}</strong> • Latency: {latency ? `< ${latency.toFixed(2)}ms` : "< 0.3ms"}
+            Active Sessions:{" "}
+            <strong className="text-[var(--text-primary)]">
+              {activeClients}
+            </strong>
+            <br />
+            Latency: {latency ? `< ${latency.toFixed(2)}ms` : "< 0.3ms"}
           </p>
         </div>
       </div>
