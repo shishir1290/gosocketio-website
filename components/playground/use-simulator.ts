@@ -103,6 +103,15 @@ export function useSimulator() {
 
       // Catch-all listener for any event received from server
       socket.onAny((event: string, ...args: any[]) => {
+        // Do not show high-frequency telemetry updates in live simulation console
+        if (
+          event === "telemetry:node_update" ||
+          event === "telemetry:nodes_init" ||
+          event === "telemetry:metrics"
+        ) {
+          return;
+        }
+
         const payload = args.length === 1 ? args[0] : args;
         const payloadStr = JSON.stringify(payload);
         const rawPacket = `42["${event}",${payloadStr.length > 130 ? payloadStr.substring(0, 130) + "..." : payloadStr}]`;
@@ -179,8 +188,7 @@ export function useSimulator() {
     const room = currentRoom.trim() || "lobby";
     addLog("out", `Emitting 'join_room' for '${room}'`, `42["join_room","${room}"]`);
     socketRef.current.emit("join_room", room);
-    socketRef.current.emit("telemetry:subscribe", { client: "web-simulator", room });
-    addLog("in", `Subscribed to room '${room}' on pure-Go gsocketio server.`);
+    addLog("in", `Joined room '${room}' successfully.`);
   };
 
   const handleEmitEvent = () => {
