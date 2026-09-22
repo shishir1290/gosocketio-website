@@ -1,23 +1,30 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { io, Socket } from "socket.io-client";
 import { LogEntry } from "./types";
+
+const DEFAULT_SERVER_URL = "https://gsocket-telemetry.onrender.com";
 
 export function useSimulator() {
   const [connected, setConnected] = useState(false);
   const [sid, setSid] = useState<string | null>(null);
+  const [serverUrl, setServerUrl] = useState(DEFAULT_SERVER_URL);
   const currentNamespace = "/";
   const [currentRoom, setCurrentRoom] = useState("lobby");
   const [eventName, setEventName] = useState("chat");
-  const [eventPayload, setEventPayload] = useState('{"text": "Hello Go socket!"}');
+  const [eventPayload, setEventPayload] = useState('{"text": "Hello everyone from live simulation!"}');
   const [logs, setLogs] = useState<LogEntry[]>([
     {
       id: "1",
       time: "12:00:00",
       type: "sys",
-      text: "Simulator ready. Click 'Connect' to initialize simulated WebSocket session.",
+      text: "Simulator ready. Connected endpoint: " + DEFAULT_SERVER_URL,
     },
   ]);
+
+  const socketRef = useRef<Socket | null>(null);
+  const logContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setLogs([
@@ -25,12 +32,16 @@ export function useSimulator() {
         id: "1",
         time: new Date().toLocaleTimeString(),
         type: "sys",
-        text: "Simulator ready. Click 'Connect' to initialize simulated WebSocket session.",
+        text: "Live Simulator ready. Target: " + DEFAULT_SERVER_URL + ". Click 'Connect' to initiate WebSocket handshake.",
       },
     ]);
-  }, []);
 
-  const logContainerRef = useRef<HTMLDivElement | null>(null);
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (logContainerRef.current) {
@@ -52,56 +63,144 @@ export function useSimulator() {
   };
 
   const handleConnect = () => {
-    if (connected) return;
-    addLog("sys", "Initiating WebSocket upgrade to http://localhost:8080/socket.io/?EIO=4&transport=websocket");
-    
-    setTimeout(() => {
-      const generatedSid = "ws_" + Math.random().toString(36).substring(2, 10);
-      setSid(generatedSid);
-      setConnected(true);
-      addLog("in", `Engine.IO open packet received. SID: ${generatedSid}, pingInterval=25000ms`, '0{"sid":"' + generatedSid + '"}');
-      addLog("out", `Connecting to namespace '${currentNamespace}'`, `40${currentNamespace === "/" ? "" : currentNamespace + ","}`);
-      
-      setTimeout(() => {
-        addLog("in", `Namespace '${currentNamespace}' connection authorized!`, `40${currentNamespace === "/" ? "" : currentNamespace + ","}{"sid":"${generatedSid}"}`);
-      }, 150);
-    }, 250);
+    if (connected || socketRef.current?.connected) return;
+
+    addLog(
+      "sys",
+      `Initiating Engine.IO v4 handshake with ${serverUrl}/socket.io/?EIO=4&transport=websocket`
+    );
+
+    try {
+      const socket = io(serverUrl, {
+        transports: ["websocket", "polling"],
+        reconnection: false,
+        timeout: 8000,
+      });
+
+      socketRef.current = socket;
+
+      socket.on("connect", () => {
+        setConnected(true);
+        setSid(socket.id || "unknown");
+        const transportName = socket.io.engine?.transport?.name || "websocket";
+
+        addLog(
+          "in",
+          `Engine.IO open packet received! SID: ${socket.id}, Transport: ${transportName}`,
+          `0{"sid":"${socket.id}","upgrades":["websocket"]}`
+        );
+        addLog(
+          "out",
+          `Connecting to namespace '${currentNamespace}'`,
+          `40${currentNamespace === "/" ? "" : currentNamespace + ","}`
+        );
+        addLog(
+          "in",
+          `Namespace '${currentNamespace}' authorized! Session live.`,
+          `40{"sid":"${socket.id}"}`
+        );
+      });
+
+      // Catch-all listener for any event received from server
+      socket.onAny((event: string, ...args: any[]) => {
+        const payload = args.length === 1 ? args[0] : args;
+        const payloadStr = JSON.stringify(payload);
+        const rawPacket = `42["${event}",${payloadStr.length > 130 ? payloadStr.substring(0, 130) + "..." : payloadStr}]`;
+
+        if (event === "chat" || event === "message" || event === "broadcast" || event === "simulation:message") {
+          let text = "";
+          let sender = "Peer";
+          if (typeof payload === "object" && payload !== null) {
+            sender = payload.sender || "Peer";
+            if (payload.payload !== undefined) {
+              if (typeof payload.payload === "object" && payload.payload !== null && payload.payload.text) {
+                text = String(payload.payload.text);
+              } else {
+                text = typeof payload.payload === "object" ? JSON.stringify(payload.payload) : String(payload.payload);
+              }
+            } else if (payload.text !== undefined) {
+              text = String(payload.text);
+            } else {
+              text = JSON.stringify(payload);
+            }
+          } else {
+            text = String(payload);
+          }
+          addLog("in", `💬 [Broadcast from ${sender}]: ${text}`, rawPacket);
+        } else if (event === "room_notification") {
+          const msg = typeof payload === "object" && payload?.message ? payload.message : JSON.stringify(payload);
+          addLog("sys", `🚪 ${msg}`, rawPacket);
+        } else if (event === "telemetry:alert") {
+          addLog("err", `⚠️ [ALERT ${payload?.nodeId || ""}]: ${payload?.message || "Incident detected"}`, rawPacket);
+        } else if (event === "telemetry:pong") {
+          addLog("in", `🏓 Pong received: ${payloadStr}`, rawPacket);
+        } else {
+          addLog(
+            "in",
+            `Server event '${event}': ${payloadStr.length > 90 ? payloadStr.substring(0, 90) + "..." : payloadStr}`,
+            rawPacket
+          );
+        }
+      });
+
+      socket.on("disconnect", (reason: string) => {
+        setConnected(false);
+        setSid(null);
+        addLog("sys", `Session closed: ${reason}`);
+      });
+
+      socket.on("connect_error", (err: Error) => {
+        setConnected(false);
+        setSid(null);
+        addLog("err", `Connection failed: ${err.message}`);
+      });
+    } catch (err: any) {
+      addLog("err", `Socket init error: ${err.message}`);
+    }
   };
 
   const handleDisconnect = () => {
-    if (!connected) return;
-    addLog("out", "Sent disconnect packet", "41");
+    if (socketRef.current) {
+      addLog("out", "Sent disconnect packet", "41");
+      socketRef.current.disconnect();
+      socketRef.current = null;
+    }
     setConnected(false);
     setSid(null);
-    addLog("sys", "Session closed.");
+    addLog("sys", "Disconnected.");
   };
 
   const handleJoinRoom = () => {
-    if (!connected) {
+    if (!socketRef.current || !connected) {
       addLog("err", "Cannot join room while disconnected.");
       return;
     }
-    addLog("out", `Emitting 'join_room' for '${currentRoom}'`, `42${currentNamespace === "/" ? "" : currentNamespace + ","}["join_room","${currentRoom}"]`);
-    setTimeout(() => {
-      addLog("in", `Subscribed to room '${currentRoom}' successfully.`);
-    }, 100);
+
+    const room = currentRoom.trim() || "lobby";
+    addLog("out", `Emitting 'join_room' for '${room}'`, `42["join_room","${room}"]`);
+    socketRef.current.emit("join_room", room);
+    socketRef.current.emit("telemetry:subscribe", { client: "web-simulator", room });
+    addLog("in", `Subscribed to room '${room}' on pure-Go gsocketio server.`);
   };
 
   const handleEmitEvent = () => {
-    if (!connected) {
+    if (!socketRef.current || !connected) {
       addLog("err", "Cannot emit event while disconnected.");
       return;
     }
 
     try {
-      const parsed = JSON.parse(eventPayload);
-      const rawPacket = `42${currentNamespace === "/" ? "" : currentNamespace + ","}["${eventName}",${JSON.stringify(parsed)}]`;
+      let parsed: any;
+      try {
+        parsed = JSON.parse(eventPayload);
+      } catch {
+        parsed = eventPayload;
+      }
+
+      const rawPacket = `42["${eventName}",${JSON.stringify(parsed)}]`;
       addLog("out", `Emitted '${eventName}': ${eventPayload}`, rawPacket);
 
-      setTimeout(() => {
-        const reply = { user: "GoServer", text: `Echo: received '${eventName}' from ${sid}` };
-        addLog("in", `Server broadcasted '${eventName}_reply': ${JSON.stringify(reply)}`, `42["${eventName}_reply",${JSON.stringify(reply)}]`);
-      }, 180);
+      socketRef.current.emit(eventName, parsed);
     } catch {
       addLog("err", "Invalid JSON format in payload field.");
     }
@@ -110,6 +209,8 @@ export function useSimulator() {
   return {
     connected,
     sid,
+    serverUrl,
+    setServerUrl,
     currentRoom,
     setCurrentRoom,
     eventName,

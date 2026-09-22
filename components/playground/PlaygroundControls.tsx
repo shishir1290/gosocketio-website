@@ -45,6 +45,9 @@ export function PlaygroundControls({
           <span className="font-bold text-sm sm:text-base text-[var(--text-primary)]">
             {connected ? "Connected" : "Disconnected"}
           </span>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            onrender.com
+          </span>
         </div>
 
         {connected ? (
@@ -96,9 +99,43 @@ export function PlaygroundControls({
       </div>
 
       <div className="flex flex-col gap-2.5">
-        <label className="block text-xs font-bold text-[var(--text-secondary)]">
-          Emit Custom Event
-        </label>
+        <div className="flex items-center justify-between">
+          <label className="block text-xs font-bold text-[var(--text-secondary)]">
+            Emit Event (Broadcast to Everyone)
+          </label>
+          <div className="flex gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                onEventNameChange("chat");
+                onEventPayloadChange(JSON.stringify({ text: "Hello everyone from live simulation!" }, null, 2));
+              }}
+              className="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-[var(--accent-cyan)] hover:bg-cyan-500/20 border border-cyan-500/20 cursor-pointer"
+            >
+              💬 Chat
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                onEventNameChange("broadcast");
+                onEventPayloadChange(JSON.stringify({ alert: "Announcement for all connected clients!" }, null, 2));
+              }}
+              className="text-[10px] px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 hover:bg-purple-500/20 border border-purple-500/20 cursor-pointer"
+            >
+              📢 Alert
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                onEventNameChange("telemetry:ping");
+                onEventPayloadChange("12345");
+              }}
+              className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 cursor-pointer"
+            >
+              ⚡ Ping
+            </button>
+          </div>
+        </div>
 
         <input
           type="text"

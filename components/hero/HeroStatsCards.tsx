@@ -2,17 +2,62 @@
 
 import { useEffect, useState } from "react";
 import { ShieldCheck, Zap, Cpu, Activity } from "lucide-react";
+import { io } from "socket.io-client";
+
+const TELEMETRY_SERVER_URL = "https://gsocket-telemetry.onrender.com";
 
 export function HeroStatsCards() {
   const [packetsCount, setPacketsCount] = useState(15156);
   const [activeClients, setActiveClients] = useState(129);
+  const [latency, setLatency] = useState<number | null>(null);
+  const [isLive, setIsLive] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setPacketsCount((prev) => prev + Math.floor(Math.random() * 45) + 12);
-      setActiveClients((prev) => prev + (Math.random() > 0.6 ? (Math.random() > 0.5 ? 1 : -1) : 0));
-    }, 800);
-    return () => clearInterval(interval);
+    let socket: any = null;
+    try {
+      socket = io(TELEMETRY_SERVER_URL, {
+        transports: ["websocket", "polling"],
+        reconnection: true,
+        reconnectionAttempts: 10,
+        reconnectionDelay: 1000,
+        timeout: 5000,
+      });
+
+      socket.on("connect", () => {
+        setIsLive(true);
+        socket.emit("telemetry:subscribe", { client: "gosocketio-website-hero" });
+      });
+
+      socket.on("telemetry:metrics", (metrics: any) => {
+        setIsLive(true);
+        if (metrics.packetsPerSecIn !== undefined && metrics.packetsPerSecOut !== undefined) {
+          const rate = metrics.packetsPerSecIn + metrics.packetsPerSecOut;
+          setPacketsCount(rate > 0 ? rate : metrics.totalPacketsOut || 450);
+        }
+        if (metrics.activeClients !== undefined) {
+          setActiveClients(metrics.activeClients);
+        }
+        if (metrics.avgLatencyMs !== undefined) {
+          setLatency(metrics.avgLatencyMs);
+        }
+      });
+
+      socket.on("disconnect", () => {
+        setIsLive(false);
+      });
+
+      socket.on("connect_error", () => {
+        setIsLive(false);
+      });
+    } catch {
+      setIsLive(false);
+    }
+
+    return () => {
+      if (socket) {
+        socket.disconnect();
+      }
+    };
   }, []);
 
   return (
@@ -79,13 +124,16 @@ export function HeroStatsCards() {
             <div className="w-10 h-10 rounded-xl bg-emerald-500/12 flex items-center justify-center text-[var(--accent-emerald)]">
               <Activity size={22} />
             </div>
-            <span className="text-xs font-semibold text-[var(--accent-emerald)]">● Live Telemetry</span>
+            <span className="text-xs font-semibold text-[var(--accent-emerald)] flex items-center gap-1.5">
+              <span className={`w-2 h-2 rounded-full ${isLive ? "bg-emerald-400 animate-pulse shadow-[0_0_8px_#10b981]" : "bg-emerald-500/70"}`} />
+              {isLive ? "Live Stream (Online)" : "● Live Telemetry"}
+            </span>
           </div>
           <div className="text-2xl font-extrabold text-[var(--text-primary)] mb-1">
             {packetsCount.toLocaleString()} <span className="text-sm font-normal text-[var(--text-secondary)]">pkts/s</span>
           </div>
           <p className="text-[var(--text-secondary)] text-xs sm:text-sm leading-normal">
-            Active Sessions: <strong className="text-[var(--text-primary)]">{activeClients}</strong> • Latency: &lt; 0.2ms
+            Active Sessions: <strong className="text-[var(--text-primary)]">{activeClients}</strong> • Latency: {latency ? `< ${latency.toFixed(2)}ms` : "< 0.3ms"}
           </p>
         </div>
       </div>

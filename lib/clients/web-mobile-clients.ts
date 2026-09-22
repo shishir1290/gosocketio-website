@@ -11,8 +11,8 @@ export const WEB_MOBILE_PLATFORMS: ClientPlatform[] = [
     code: `import { io, Socket } from "socket.io-client";
 import { useEffect, useState } from "react";
 
-// Initialize client with WebSocket preference and auth token
-export const socket: Socket = io("http://localhost:8080", {
+// Initialize client (or use "https://gsocket-telemetry.onrender.com" for live demo)
+export const socket: Socket = io("https://gsocket-telemetry.onrender.com", {
   transports: ["websocket", "polling"],
   reconnection: true,
   reconnectionDelay: 1000,
