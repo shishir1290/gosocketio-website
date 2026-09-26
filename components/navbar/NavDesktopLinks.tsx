@@ -1,5 +1,7 @@
-import Link from "next/link";
+"use client";
+
 import { NAV_LINKS } from "./nav-links";
+import { scrollToSection } from "@/lib/navigation";
 
 export function NavDesktopLinks() {
   return (
@@ -7,15 +9,16 @@ export function NavDesktopLinks() {
       {NAV_LINKS.map((item) => {
         const Icon = item.icon;
         return (
-          <Link
+          <button
             key={item.href}
-            href={item.href}
+            type="button"
+            onClick={() => scrollToSection(item.href)}
             aria-label={item.aria}
-            className="flex items-center gap-1.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-xs font-medium transition-colors whitespace-nowrap"
+            className="flex items-center gap-1.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] text-xs font-medium transition-colors whitespace-nowrap cursor-pointer"
           >
             <Icon size={14} className="text-[var(--text-muted)]" />
             <span>{item.label}</span>
-          </Link>
+          </button>
         );
       })}
     </nav>

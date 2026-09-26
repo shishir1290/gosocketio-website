@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SEARCH_INDEX, SearchItem } from "@/lib/search-index";
+import { scrollToSection } from "@/lib/navigation";
 import { SearchHeader } from "./search/SearchHeader";
 import { SearchResultsList } from "./search/SearchResultsList";
 import { SearchFooter } from "./search/SearchFooter";
@@ -62,17 +63,35 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     onClose();
     if (item.isExternal) {
       window.open(item.href, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    if (item.category === "Guides" || item.id.startsWith("guide-")) {
+      const stepMap: Record<string, number> = {
+        "guide-install": 0,
+        "guide-minimal": 1,
+        "guide-auth": 2,
+        "guide-namespaces": 3,
+        "guide-rooms": 4,
+        "guide-acks": 5,
+        "guide-binary": 6,
+        "guide-config": 7,
+      };
+      const stepIndex = stepMap[item.id] !== undefined ? stepMap[item.id] : 0;
+      scrollToSection("steps", { stepIndex });
+    } else if (item.category === "Client SDKs" || item.id.startsWith("sdk-")) {
+      const platformMap: Record<string, string> = {
+        "sdk-js": "javascript",
+        "sdk-python": "python",
+        "sdk-flutter": "flutter",
+        "sdk-swift": "swift",
+        "sdk-kotlin": "android",
+        "sdk-unity": "unity",
+      };
+      const platformId = platformMap[item.id] || "javascript";
+      scrollToSection("clients", { platformId });
     } else {
-      if (item.href === "#") {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      } else {
-        const el = document.querySelector(item.href);
-        if (el) {
-          el.scrollIntoView({ behavior: "smooth" });
-        } else {
-          window.location.hash = item.href;
-        }
-      }
+      scrollToSection(item.href);
     }
   };
 

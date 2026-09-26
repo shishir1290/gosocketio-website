@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { GUIDE_SUB_ITEMS } from "./sidebar-data";
+import { GUIDE_SUB_ITEMS, GuideSubItem } from "./sidebar-data";
 
 interface SidebarGuidesProps {
-  onLinkClick: (id: string, hash: string) => void;
+  onLinkClick: (id: string, hash: string, options?: { stepIndex?: number }) => void;
 }
 
 export function SidebarGuides({ onLinkClick }: SidebarGuidesProps) {
@@ -17,21 +16,21 @@ export function SidebarGuides({ onLinkClick }: SidebarGuidesProps) {
         </span>
       </div>
       <div className="flex flex-col gap-0.5">
-        {GUIDE_SUB_ITEMS.map((guide, idx) => {
+        {GUIDE_SUB_ITEMS.map((guide: GuideSubItem) => {
           const Icon = guide.icon;
           return (
-            <Link
-              key={idx}
-              href={guide.href}
-              onClick={() => onLinkClick("steps", guide.href)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11.5px] text-[var(--text-secondary)] hover:text-[var(--accent-cyan)] hover:bg-white/[0.03] transition-colors no-underline group"
+            <button
+              key={guide.id}
+              type="button"
+              onClick={() => onLinkClick("steps", guide.href, { stepIndex: guide.stepIndex })}
+              className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg text-[11.5px] text-left text-[var(--text-secondary)] hover:text-[var(--accent-cyan)] hover:bg-white/[0.04] transition-all cursor-pointer group"
             >
               <Icon
                 size={12}
-                className="text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] shrink-0"
+                className="text-[var(--text-muted)] group-hover:text-[var(--accent-cyan)] shrink-0 transition-colors"
               />
               <span className="truncate">{guide.label}</span>
-            </Link>
+            </button>
           );
         })}
       </div>

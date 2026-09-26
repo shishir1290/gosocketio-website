@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
-import { NAV_MENU_ITEMS } from "./sidebar-data";
+import { NAV_MENU_ITEMS, NavMenuItem } from "./sidebar-data";
 
 interface SidebarMenuProps {
   activeSection: string;
@@ -19,15 +18,15 @@ export function SidebarMenu({
         Documentation Menu
       </div>
       <nav className="flex flex-col gap-0.5">
-        {NAV_MENU_ITEMS.map((item) => {
+        {NAV_MENU_ITEMS.map((item: NavMenuItem) => {
           const Icon = item.icon;
           const isActive = activeSection === item.id;
           return (
-            <Link
+            <button
               key={item.id}
-              href={item.href}
+              type="button"
               onClick={() => onLinkClick(item.id, item.href)}
-              className={`group relative flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-colors no-underline ${
+              className={`group relative w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-left transition-colors cursor-pointer ${
                 isActive
                   ? "text-[var(--accent-amber)] font-bold"
                   : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/[0.03]"
@@ -76,7 +75,7 @@ export function SidebarMenu({
                   className="w-1.5 h-1.5 rounded-full bg-[var(--accent-amber)] shadow-[0_0_6px_rgba(245,158,11,0.8)] z-10"
                 />
               )}
-            </Link>
+            </button>
           );
         })}
       </nav>

@@ -2,9 +2,69 @@ import { DocStep } from "./types";
 
 export const GUIDE_STEPS_PART2: DocStep[] = [
   {
-    id: "step-5-acknowledgments",
+    id: "step-5-rooms-broadcast",
     number: "05",
-    title: "Request-Response & ACKs",
+    title: "Rooms & Broadcasting",
+    shortDesc: "Manage room subscriptions and broadcast targeted messages with skip filters.",
+    summary: "gsocketio features a built-in concurrent room manager. Broadcast to entire namespaces or specific rooms while optionally skipping the sender.",
+    filename: "chat.go",
+    language: "go",
+    code: `package main
+
+import (
+    "encoding/json"
+    "log"
+    sio "github.com/shishir1290/gsocketio"
+)
+
+type ChatMessage struct {
+    Room string \`json:"room"\`
+    User string \`json:"user"\`
+    Text string \`json:"text"\`
+}
+
+func setupRooms(srv *sio.Server) {
+    srv.OnEvent("/", "join_room", func(c sio.Conn, args []json.RawMessage) {
+        var roomName string
+        if len(args) > 0 && json.Unmarshal(args[0], &roomName) == nil {
+            c.Join(roomName)
+            log.Printf("Client %s joined room: %s", c.ID(), roomName)
+
+            srv.ToRoom("/", roomName, "user_joined", c, map[string]string{
+                "userId": c.ID(),
+                "room":   roomName,
+            })
+        }
+    })
+
+    srv.OnEvent("/", "send_message", func(c sio.Conn, args []json.RawMessage) {
+        if len(args) == 0 {
+            return
+        }
+        var msg ChatMessage
+        if err := json.Unmarshal(args[0], &msg); err != nil {
+            return
+        }
+        srv.ToRoom("/", msg.Room, "new_message", c, msg)
+    })
+
+    srv.OnEvent("/", "leave_room", func(c sio.Conn, args []json.RawMessage) {
+        var roomName string
+        if len(args) > 0 && json.Unmarshal(args[0], &roomName) == nil {
+            c.Leave(roomName)
+        }
+    })
+}`,
+    highlights: [
+      "c.Join(room) and c.Leave(room) handle concurrency automatically with RWMutex",
+      "srv.ToRoom(ns, room, event, skipConn, args...) allows skipping any connection (e.g. sender)",
+      "Disconnecting automatically cleans up all room memberships via srv.LeaveAllRooms"
+    ]
+  },
+  {
+    id: "step-6-acknowledgments",
+    number: "06",
+    title: "Event Acknowledgment",
     shortDesc: "Send events with client acknowledgment callbacks or reply to client ACKs.",
     summary: "Socket.IO acknowledgments enable RPC-style request/reply patterns. Supports standard JSON ACKs and high-performance Binary ACKs.",
     filename: "acks.go",
@@ -14,7 +74,6 @@ export const GUIDE_STEPS_PART2: DocStep[] = [
 import (
     "encoding/json"
     "log"
-    "time"
     sio "github.com/shishir1290/gsocketio"
 )
 
@@ -39,9 +98,9 @@ func setupAcks(srv *sio.Server) {
     ]
   },
   {
-    id: "step-6-binary-events",
-    number: "06",
-    title: "High-Performance Binary Streams",
+    id: "step-7-binary-events",
+    number: "07",
+    title: "Binary Buffers",
     shortDesc: "Stream raw byte buffers without base64 inflation or encoding overhead.",
     summary: "Pure WebSocket binary frames (Opcode 0x02) bypass JSON string encoding, maximizing throughput for file transfers, images, and audio buffers.",
     filename: "binary.go",
@@ -78,9 +137,9 @@ func setupBinary(srv *sio.Server) {
     ]
   },
   {
-    id: "step-7-engineio-options",
-    number: "07",
-    title: "Custom Engine.IO Configuration",
+    id: "step-8-engineio-options",
+    number: "08",
+    title: "Production Config",
     shortDesc: "Fine-tune heartbeats, payload thresholds, and connection limits.",
     summary: "Customize ping timeouts, payload constraints, and CORS headers for production environments.",
     filename: "config.go",

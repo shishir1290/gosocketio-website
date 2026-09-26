@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { STEP_BY_STEP_DOCS } from "@/lib/docs-data";
 import { Sparkles } from "lucide-react";
@@ -9,7 +9,48 @@ import { StepDetailCard } from "./guide/StepDetailCard";
 
 export default function StepByStepGuide() {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
-  const activeStep = STEP_BY_STEP_DOCS[activeStepIndex];
+  const activeStep = STEP_BY_STEP_DOCS[activeStepIndex] || STEP_BY_STEP_DOCS[0];
+
+  useEffect(() => {
+    const handleSelectStep = (e: Event) => {
+      const customEvent = e as CustomEvent<{ stepIndex?: number; id?: string }>;
+      if (
+        typeof customEvent.detail?.stepIndex === "number" &&
+        customEvent.detail.stepIndex >= 0 &&
+        customEvent.detail.stepIndex < STEP_BY_STEP_DOCS.length
+      ) {
+        setActiveStepIndex(customEvent.detail.stepIndex);
+      } else if (customEvent.detail?.id) {
+        const found = STEP_BY_STEP_DOCS.findIndex(
+          (s) => s.id === customEvent.detail.id
+        );
+        if (found !== -1) setActiveStepIndex(found);
+      }
+    };
+
+    const handleHash = () => {
+      const hash = window.location.hash.replace(/^#/, "");
+      if (!hash) return;
+      const foundIndex = STEP_BY_STEP_DOCS.findIndex(
+        (s, idx) =>
+          s.id === hash ||
+          `step-${idx + 1}` === hash ||
+          `guide-${idx + 1}` === hash
+      );
+      if (foundIndex !== -1) {
+        setActiveStepIndex(foundIndex);
+      }
+    };
+
+    window.addEventListener("select-guide-step", handleSelectStep);
+    window.addEventListener("hashchange", handleHash);
+    handleHash();
+
+    return () => {
+      window.removeEventListener("select-guide-step", handleSelectStep);
+      window.removeEventListener("hashchange", handleHash);
+    };
+  }, []);
 
   return (
     <section id="steps" className="pt-4 md:pt-6 pb-14 md:pb-20 relative">

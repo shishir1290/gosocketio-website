@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CLIENT_PLATFORMS } from "@/lib/client-examples";
 import CodeBlock from "./CodeBlock";
@@ -28,6 +28,41 @@ const getPlatformLucideIcon = (id: string, size = 16) => {
 export default function CrossPlatformClients() {
   const [activePlatformId, setActivePlatformId] = useState(CLIENT_PLATFORMS[0].id);
   const activePlatform = CLIENT_PLATFORMS.find((p) => p.id === activePlatformId) || CLIENT_PLATFORMS[0];
+
+  useEffect(() => {
+    const handleSelectClient = (e: Event) => {
+      const customEvent = e as CustomEvent<{ platformId?: string }>;
+      if (customEvent.detail?.platformId) {
+        const targetId = customEvent.detail.platformId.toLowerCase();
+        const found = CLIENT_PLATFORMS.find(
+          (p) => p.id.toLowerCase() === targetId || (targetId === "kotlin" && p.id === "android")
+        );
+        if (found) {
+          setActivePlatformId(found.id);
+        }
+      }
+    };
+
+    const handleHash = () => {
+      const hash = window.location.hash.replace(/^#/, "").toLowerCase();
+      if (!hash) return;
+      const found = CLIENT_PLATFORMS.find(
+        (p) => p.id.toLowerCase() === hash || (hash === "kotlin" && p.id === "android")
+      );
+      if (found) {
+        setActivePlatformId(found.id);
+      }
+    };
+
+    window.addEventListener("select-client-sdk", handleSelectClient);
+    window.addEventListener("hashchange", handleHash);
+    handleHash();
+
+    return () => {
+      window.removeEventListener("select-client-sdk", handleSelectClient);
+      window.removeEventListener("hashchange", handleHash);
+    };
+  }, []);
 
   return (
     <section id="clients" className="pt-4 md:pt-6 pb-14 md:pb-20 relative">

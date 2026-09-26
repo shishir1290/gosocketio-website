@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, Globe, Github, Star } from "lucide-react";
 import PortfolioLink from "@/components/PortfolioLink";
 import { NAV_LINKS } from "./nav-links";
+import { scrollToSection } from "@/lib/navigation";
 
 interface NavMobileDrawerProps {
   isOpen: boolean;
@@ -55,16 +56,19 @@ export function NavMobileDrawer({
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.04 }}
                   >
-                    <Link
-                      href={item.href}
-                      onClick={onClose}
-                      className="flex items-center gap-3 p-2.5 rounded-lg text-[var(--text-primary)] text-sm font-semibold bg-white/[0.02] border border-[var(--border-subtle)] hover:border-[var(--border-active)] transition-colors no-underline"
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        scrollToSection(item.href);
+                      }}
+                      className="w-full flex items-center gap-3 p-2.5 rounded-lg text-[var(--text-primary)] text-sm font-semibold bg-white/[0.02] border border-[var(--border-subtle)] hover:border-[var(--border-active)] transition-colors text-left cursor-pointer"
                     >
                       <span className="text-[var(--accent-cyan)] flex">
                         <Icon size={16} />
                       </span>
                       <span>{item.label}</span>
-                    </Link>
+                    </button>
                   </motion.div>
                 );
               })}

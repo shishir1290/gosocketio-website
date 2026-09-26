@@ -6,6 +6,7 @@ import { SidebarMenu } from "./sidebar/SidebarMenu";
 import { SidebarGuides } from "./sidebar/SidebarGuides";
 import { SidebarSdkList } from "./sidebar/SidebarSdkList";
 import { SidebarFooter } from "./sidebar/SidebarFooter";
+import { scrollToSection } from "@/lib/navigation";
 
 interface DocsSidebarProps {
   onOpenSearch?: () => void;
@@ -60,7 +61,11 @@ export default function DocsSidebar({ onCloseMobile }: DocsSidebarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleLinkClick = (id: string, hash: string) => {
+  const handleLinkClick = (
+    id: string,
+    hash: string,
+    options?: { stepIndex?: number; platformId?: string }
+  ) => {
     setActiveSection(id);
     isClickScrolling.current = true;
     setTimeout(() => {
@@ -68,9 +73,12 @@ export default function DocsSidebar({ onCloseMobile }: DocsSidebarProps) {
     }, 800);
 
     if (onCloseMobile) onCloseMobile();
-    if (hash === "#" || hash === "") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+
+    scrollToSection(hash || id, {
+      stepIndex: options?.stepIndex,
+      platformId: options?.platformId,
+      onComplete: onCloseMobile,
+    });
   };
 
   return (

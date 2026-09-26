@@ -1,10 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { CLIENT_LANGUAGES } from "./sidebar-data";
+import { CLIENT_LANGUAGES, ClientLanguageItem } from "./sidebar-data";
 
 interface SidebarSdkListProps {
-  onLinkClick: (id: string, hash: string) => void;
+  onLinkClick: (id: string, hash: string, options?: { platformId?: string }) => void;
 }
 
 export function SidebarSdkList({ onLinkClick }: SidebarSdkListProps) {
@@ -17,20 +16,20 @@ export function SidebarSdkList({ onLinkClick }: SidebarSdkListProps) {
         </span>
       </div>
       <div className="flex flex-col gap-0.5">
-        {CLIENT_LANGUAGES.map((client, idx) => (
-          <Link
-            key={idx}
-            href={client.href}
-            onClick={() => onLinkClick("clients", client.href)}
-            className="flex items-center justify-between px-3 py-1.5 rounded-lg text-[11.5px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/[0.03] transition-colors no-underline group"
+        {CLIENT_LANGUAGES.map((client: ClientLanguageItem) => (
+          <button
+            key={client.id}
+            type="button"
+            onClick={() => onLinkClick("clients", client.href, { platformId: client.id })}
+            className="w-full flex items-center justify-between px-3 py-1.5 rounded-lg text-[11.5px] text-left text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-white/[0.04] transition-all cursor-pointer group"
           >
             <span className="truncate group-hover:text-[var(--accent-purple)] transition-colors">
               {client.label}
             </span>
-            <span className="text-[9.5px] font-mono text-[var(--text-muted)] bg-white/5 px-1.5 py-0.2 rounded shrink-0">
+            <span className="text-[9.5px] font-mono text-[var(--text-muted)] bg-white/5 px-1.5 py-0.2 rounded shrink-0 group-hover:border-purple-500/30 transition-colors">
               {client.tag}
             </span>
-          </Link>
+          </button>
         ))}
       </div>
     </div>

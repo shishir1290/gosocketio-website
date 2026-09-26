@@ -50,12 +50,12 @@ func setupAuth(srv *sio.Server) {
     ]
   },
   {
-    id: "step-4-rooms-broadcast",
+    id: "step-4-namespaces",
     number: "04",
-    title: "Rooms, Groups & Targeted Broadcasting",
-    shortDesc: "Manage room subscriptions and broadcast to namespaces with skip filters.",
-    summary: "gsocketio features a built-in concurrent room manager. Broadcast to entire namespaces or specific rooms while optionally skipping the sender.",
-    filename: "chat.go",
+    title: "Namespaces & Routing",
+    shortDesc: "Segment real-time communications into isolated namespace trees.",
+    summary: "gsocketio supports dynamic and static Socket.IO namespaces, allowing multi-tenant architectures, isolated chat domains, and distinct event handlers.",
+    filename: "namespaces.go",
     language: "go",
     code: `package main
 
@@ -65,48 +65,34 @@ import (
     sio "github.com/shishir1290/gsocketio"
 )
 
-type ChatMessage struct {
-    Room string \`json:"room"\`
-    User string \`json:"user"\`
-    Text string \`json:"text"\`
-}
-
-func setupRooms(srv *sio.Server) {
-    srv.OnEvent("/", "join_room", func(c sio.Conn, args []json.RawMessage) {
-        var roomName string
-        if len(args) > 0 && json.Unmarshal(args[0], &roomName) == nil {
-            c.Join(roomName)
-            log.Printf("Client %s joined room: %s", c.ID(), roomName)
-
-            srv.ToRoom("/", roomName, "user_joined", c, map[string]string{
-                "userId": c.ID(),
-                "room":   roomName,
-            })
-        }
+func setupNamespaces(srv *sio.Server) {
+    // 1. Root default namespace "/"
+    srv.OnConnect("/", func(c sio.Conn) error {
+        log.Printf("Connected to main lobby: %s", c.ID())
+        return nil
     })
 
-    srv.OnEvent("/", "send_message", func(c sio.Conn, args []json.RawMessage) {
-        if len(args) == 0 {
-            return
-        }
-        var msg ChatMessage
-        if err := json.Unmarshal(args[0], &msg); err != nil {
-            return
-        }
-        srv.ToRoom("/", msg.Room, "new_message", c, msg)
+    // 2. Dedicated admin namespace "/admin" with restricted privileges
+    srv.OnConnect("/admin", func(c sio.Conn) error {
+        log.Printf("Admin operator connected: %s", c.ID())
+        _ = c.Emit("admin_status", map[string]string{"status": "online", "mode": "cluster"})
+        return nil
     })
 
-    srv.OnEvent("/", "leave_room", func(c sio.Conn, args []json.RawMessage) {
-        var roomName string
-        if len(args) > 0 && json.Unmarshal(args[0], &roomName) == nil {
-            c.Leave(roomName)
-        }
+    srv.OnEvent("/admin", "system_reboot", func(c sio.Conn, args []json.RawMessage) {
+        log.Println("Admin initiated system maintenance command")
+    })
+
+    // 3. Isolated multi-tenant game or chat namespace "/chat"
+    srv.OnConnect("/chat", func(c sio.Conn) error {
+        log.Printf("Chat client %s entered /chat namespace", c.ID())
+        return nil
     })
 }`,
     highlights: [
-      "c.Join(room) and c.Leave(room) handle concurrency automatically with RWMutex",
-      "srv.ToRoom(ns, room, event, skipConn, args...) allows skipping any connection (e.g. sender)",
-      "Disconnecting automatically cleans up all room memberships via srv.LeaveAllRooms"
+      "Completely isolated event namespaces and connection maps",
+      "Per-namespace connect/disconnect lifecycles and middleware authorization",
+      "Zero cross-namespace event leakage with zero memory overhead"
     ]
   }
 ];
